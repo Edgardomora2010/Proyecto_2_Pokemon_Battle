@@ -1,2 +1,2 @@
-# Proyecto_1_Pokemon_Battle
+# Proyecto_2_Pokemon_Battle
 Batalla Poken con API
