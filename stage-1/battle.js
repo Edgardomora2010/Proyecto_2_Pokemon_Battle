@@ -135,7 +135,7 @@ function render_Battle(state){
     });
     
     // Imagen de fondo de arena
-    battleArena.style.backgroundImage = "url('./img/Arena_1.png')";
+    battleArena.style.backgroundImage = "url('./stage-1/img/Arena_1.png')";
     
     // Limpia celdas enemigo
     enemyCells.forEach(celda => {

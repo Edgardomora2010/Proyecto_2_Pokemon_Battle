@@ -509,9 +509,8 @@ body.tema_oscuro .barra_cooldown{
 .contenedor_controles{
     display: flex;
     justify-content: space-evenly;
-    align-items:stretch;
+    align-items: stretch;
     gap: 20px;
-    max-height: 80px;
 }
 
 .contenedor_controles button{

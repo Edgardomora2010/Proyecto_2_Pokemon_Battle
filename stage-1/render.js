@@ -172,7 +172,7 @@ export function render_Enemy_Panel(datos_enemigo){
     // Si no hay datos válidos, resetear panel enemigo a estado inicial
     if (!datos_enemigo) {
         
-        mi_enemigo_imagen.src = "./img/Question_mark.png";
+        mi_enemigo_imagen.src = "./stage-1/img/Question_mark.png";
         mi_enemigo_nombre.textContent = "";
         mi_enemigo_tipos.innerHTML = "";
         mi_enemigo_hp.textContent = "";
@@ -250,12 +250,12 @@ export function render_carga_resultados(estado, mensaje){
     if (estado === 0)
     {
         mi_enemigo_resultado.textContent = `Resultado:${mensaje}`;
-        mi_enemigo_barra_carga.src = "./img/Loading_animation_bar.gif";
+        mi_enemigo_barra_carga.src = "./stage-1/img/Loading_animation_bar.gif";
         
     } else if (estado === 1) {
         
         mi_enemigo_resultado.textContent = `Resultado:${mensaje}`;
-        mi_enemigo_barra_carga.src = "./img/Lupa.png";
+        mi_enemigo_barra_carga.src = "./stage-1/img/Lupa.png";
         
     }
     
@@ -317,7 +317,7 @@ export function animar_seleccion_random(){
             // Se asigna imagen a componente html de imagen del enemigo
             // cada imagen tiene un número indentificador, por lo que al
             // aumentar en contador, reasigna la nueva imagen
-            mi_enemigo_imagen.src = `./img/S${contador}.png`;
+            mi_enemigo_imagen.src = `./stage-1/img/S${contador}.png`;
 
             contador++;
             

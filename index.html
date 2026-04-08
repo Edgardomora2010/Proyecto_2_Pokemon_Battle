@@ -24,7 +24,7 @@
         <title>Mi Batalla Pokemon</title>
         
         <!-- ACCESIBILIDAD: IMPLEMENTACIÓN CSS (EN ARCHIVO INDEPENDIENTE) -->
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="./stage-1/style.css">
            
         <!-- ACCESIBILIDAD: OTROS RECURSOS -->
         
@@ -62,7 +62,7 @@
     <!-- HEADER: Decorativo de página con imagen de pokemon: Charizard -->
     <header class="header_adorno">
       <!-- Imagen de charizard para adornar aún más el header -->
-      <img src="./img/charizard.png" class="charizard">
+      <img src="./stage-1/img/charizard.png" class="charizard">
     </header>
 
     <!-- STAGE 1 -->
@@ -221,7 +221,7 @@
               <h3 id="titulo_enemy_panel">ENEMY PANEL</h3>
               
               <!-- Imagen pokemón enemigo -->
-              <img id="enemy_sprite" src="./img/Question_mark.png" alt="pokemon">
+              <img id="enemy_sprite" src="./stage-1/img/Question_mark.png" alt="pokemon">
               
             </div> <!-- Termina contenedor de imagen y título, de pokemon enemigo -->
             
@@ -257,7 +257,7 @@
                   <!-- estatus de carga del enemigo -->
                   <div id="enemy_status">
                     <p id ="resultado_carga"><strong>Resultado:</strong></p>
-                    <img id="barra_carga" src="./img/Lupa.png">
+                    <img id="barra_carga" src="./stage-1/img/Lupa.png">
                   </div>
                 
                 </div> <!-- Termina mini-panel de estadísticas, del pokemon enemigo -->
@@ -284,7 +284,7 @@
     </details>
 
     <!-- BLOQUE: STAGE 2 -->
-    <details id="bloque_stage_2" class="bloque_colapsable" close>
+    <details id="bloque_stage_2" class="bloque_colapsable">
       <!-- Título de bloque Stage 2 -->
       <summary class="titulo_colapsable">STAGE 2</summary>
 
@@ -350,7 +350,7 @@
     </details>
 
     <!-- BLOQUE BATTLE LOG: Detalle de jugadas, ataques y resultados de batalla -->
-    <details id = "bloque_log" class="bloque_colapsable" close>
+    <details id = "bloque_log" class="bloque_colapsable">
       <!-- Título colapsable de sección -->
       <summary class="titulo_colapsable">BATTLE LOG</summary>
  
@@ -379,7 +379,7 @@
     <!-- FOOTER: Decorativo de página con imagen de pokemon: Charmander -->
     <footer class="footer_adorno">
       <!-- Imagen de charizard para adornar aún más el footer -->
-      <img src="./img/charmander.png" class="charmander">
+      <img src="./stage-1/img/charmander.png" class="charmander">
     </footer>
 
   </div>
@@ -388,7 +388,7 @@
        de clases -->  
   <!-- Scripts JS: Código principal para manipulación de página, este se encarga
        de interactuar con: trainer.config.js, api.js y render.js -->
-  <script type="module" src="./main.js"></script>
+  <script type="module" src="./stage-1/main.js"></script>
 
 </body>
   
