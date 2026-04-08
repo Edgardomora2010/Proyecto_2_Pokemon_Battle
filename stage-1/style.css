@@ -1,0 +1,672 @@
+/*
+ * Institución: INSTITUTO TECNOLOGICO DE COSTA RICA (TEC)
+ * DESARROLLO DE APLICACIONES
+ * Curso: PROGRAMACION WEB I GR 1 T I 2026
+ * Proyecto No. 2:  My Pokemon Battle
+ * Tema: Programación de Javascript, HTML,CSS
+ * Peticiones a API's.
+ * Profesor: Jose Pablo Garbanzo
+ * Autor: Edgardo Mora M.
+ * Fecha: 12-04-2026
+ */
+
+
+/* ********************************************************************************************************************/
+/* RESET */
+/* ********************************************************************************************************************/
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: white;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ********************************************************************************************************************/
+/* PAGINA GENERAL */
+/* ********************************************************************************************************************/
+
+.pagina{
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+#error_busqueda{
+    color: red;
+    font-weight: 700;
+}
+
+p{
+    margin-top: 8px;
+}
+
+input{
+    margin-top: 10px;
+}
+
+#btn_random,
+#btn_iniciar_batalla{
+    margin-top: 15px;
+}
+
+div{
+    margin-top: 5px;
+}
+
+#barra_carga{
+    display: block;
+    object-fit: contain;
+    margin-top: 10px;
+    max-height: 44px;
+    max-width: 200px;
+}
+
+#enemy_sprite{
+    height: 100px;
+    width: auto;
+}
+
+.btn_stage_1{
+    padding: 8px 12px;
+    border: -1px;
+    border-radius: 6px;
+    background-color: #ff8c00;  
+    font-weight: 700;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+button {
+    /*user-select: none;*/
+    outline: none;
+}
+
+button:focus {
+    outline: none;
+}
+
+#lista_player_moves li,
+#lista_enemy_moves li{
+    margin-bottom: 5px;
+}
+
+#lista_player_moves li,
+#lista_enemy_moves li{
+    line-height: 1.4;
+}
+
+.hp_status{
+    display: Flex;
+    justify-content: space-between;
+    height: auto;
+    font-size: larger;
+    font-weight: 600;
+    background-color: transparent;
+}
+
+#hp_pokemon_status{
+    display: none;
+    align-items: center;
+    width: 200px;
+    font-size: larger;
+    font-weight: 600;
+    color:white;
+    background-color: black;
+}
+
+#hp_enemy_status{
+    display: none;
+    align-items: center;
+    width: 200px;
+    font-size: larger;
+    font-weight: 600;
+    color:white;
+    background-color: black;
+}
+
+/* ********************************************************************************************************************/
+/* NAV / HEADER / FOOTER */
+/* ********************************************************************************************************************/
+
+.menu_principal{
+    height: 60px;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 6px;
+}
+
+.titulo_menu{
+    color: white;
+    font-family: "Orbitron", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.boton_tema{
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 8px 12px;
+    border: 2px solid white;
+    background-color: black;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: "Orbitron", sans-serif;
+    font-size: 0.85rem; 
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.header_adorno{
+    position: relative;
+    height: 150px;
+    background: transparent;
+}
+
+.header_adorno::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('./img/Header.png') no-repeat bottom;
+    background-size: cover;
+    opacity: 1;
+}
+
+.footer_adorno{
+    position: relative;
+    height: 150px;
+    background: transparent;
+}
+
+.footer_adorno::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('./img/footer.png') no-repeat top;
+    background-size: cover;
+    opacity: 1;
+}
+
+/* <Img> Decorativa Charizard */
+.charizard{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 140px;
+    z-index: 10;
+    transition: all 0.35s ease;
+}
+
+/* <Img> Decorativa Charmander */
+.charmander{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 120px;
+    z-index: 10;
+}
+
+/* ********************************************************************************************************************/
+/* TEMA GLOBAL */
+/* ********************************************************************************************************************/
+
+/* Color general de página en modo: Claro */
+body.tema_claro{
+    background-color: white;
+    color: black;
+}
+
+/* Color general de página en modo: Oscuro */
+body.tema_oscuro{
+    background-color: #2b2b2b;
+    color: #ff8c00;
+}
+
+/* Charizard se mueve a la derecha en oscuro */
+body.tema_oscuro .charizard{
+    left: auto;
+    right: 0;
+}
+
+/* texto general en oscuro */
+body.tema_oscuro p,
+body.tema_oscuro h1,
+body.tema_oscuro h2,
+body.tema_oscuro h3,
+body.tema_oscuro span,
+body.tema_oscuro summary{
+    color: #ff8c00;
+}
+
+/* bloques principales en oscuro */
+body.tema_oscuro .stage_1,
+body.tema_oscuro .stage_2,
+body.tema_oscuro .battle_log,
+body.tema_oscuro .panel_stage_1,
+body.tema_oscuro .battle_arena,
+body.tema_oscuro .controles,
+body.tema_oscuro .battle_info,
+body.tema_oscuro .battle_resultado,
+body.tema_oscuro .celda,
+body.tema_oscuro .flechas,
+body.tema_oscuro .cooldown,
+body.tema_oscuro .titulo_colapsable{
+    background-color: #2b2b2b;
+    color: #ff8c00;
+    border-color: #ff8c00;
+}
+
+/* Títulos de secciones  */
+body.tema_oscuro .battle_arena h3,
+body.tema_oscuro .controles h3,
+body.tema_oscuro .battle_info h3,
+body.tema_oscuro .battle_resultado h3{
+    background-color: #ff8c00;
+    color: #2b2b2b;
+}
+
+/* botones */
+body.tema_oscuro button{
+    background-color: #2b2b2b;
+    color: #ff8c00;
+    border-color: #ff8c00;
+}
+
+/* botón del menú en oscuro */
+body.tema_oscuro .boton_tema{
+    background-color: #2b2b2b;
+    color: #ff8c00;
+    border-color: #ff8c00;
+}
+
+/* barra de cooldown */
+body.tema_oscuro .barra_cooldown{
+    background-color: #2b2b2b;
+    border-color: #ff8c00;
+}
+
+/* ********************************************************************************************************************/
+/* BLOQUES COLAPSABLES */
+/* ********************************************************************************************************************/
+
+.bloque_colapsable{
+    margin-bottom: 14px;
+    border: none;
+    background-color: transparent;
+}
+
+.titulo_colapsable{
+    display: block;
+    padding: 14px 18px;
+    font-family: "Orbitron", sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    list-style: none;
+    background-color: white;
+    color: black;
+    border: 2.5px solid gray;
+    border-radius: 8px;
+    transition: 0.2s ease;
+}
+
+.titulo_colapsable::-webkit-details-marker{
+    display: none;
+}
+
+.titulo_colapsable::after{
+    content: "  [-]";
+    font-weight: normal;
+}
+
+.bloque_colapsable:not([open]) .titulo_colapsable::after{
+    content: "  [+]";
+}
+
+.bloque_colapsable[open] .stage_1,
+.bloque_colapsable[open] .stage_2,
+.bloque_colapsable[open] .battle_log{
+    margin-top: 10px;
+}
+
+/* ********************************************************************************************************************/
+/* CONTENIDO INTERNO DE CADA BLOQUE */
+/* ********************************************************************************************************************/
+
+.stage_1,
+.stage_2,
+.battle_log{
+    padding: 16px;
+    background-color: white;
+    border: 2.5px solid gray;
+    border-radius: 8px;
+}
+
+#resultados_busqueda {
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    max-width: 250px;
+}
+
+#resultados_busqueda li {
+    list-style: none;
+    padding: 6px 10px;
+    border-bottom: 1px solid #eee;
+}
+
+#resultados_busqueda li:last-child {
+    border-bottom: none;
+}
+
+#resultados_busqueda li:hover {
+    background-color: #f2f2f2;
+}
+
+/* ********************************************************************************************************************/
+/* STAGE 1 */
+/* ********************************************************************************************************************/
+
+.contenedor_stage_1{
+    display: flex;
+    justify-content: space-evenly;
+    align-items:stretch;
+    gap: 20px;
+}
+
+.panel_stage_1{
+    flex: 0 0 calc(33.333% - 14px);
+    min-height: 300px;
+    padding: 18px;
+    background-color: white;
+    border: 2.5px solid gray;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.panel_stage_1 h3{
+    width: 100%;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    text-align: center;
+    font-family: "Orbitron", sans-serif;
+    font-size: 1.05rem;
+    border-bottom: 2px solid rgba(0,0,0,0.15);
+}
+
+.panel_columna_1{
+    
+    display: block;
+    margin-right: 20px;
+    margin-left: 20px;
+ 
+}
+
+.panel_columna_2{
+    
+    display: block;
+    margin-right: 20px; 
+    margin-left: 20px;
+
+    
+}
+
+.contenedor_info_texto{
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+
+}
+
+/* ********************************************************************************************************************/
+/* STAGE 2 */
+/* ********************************************************************************************************************/
+
+.battle_arena,
+.controles{
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: white;
+    border: 2.5px solid gray;
+    border-radius: 15px;
+}
+
+.battle_arena h3,
+.controles h3,
+.battle_info h3,
+.battle_resultado h3{
+    display: inline-block;
+    margin-bottom: 14px;
+    font-family: "Orbitron", sans-serif;
+    font-size: 1rem;
+    padding: 4px 10px;
+    color: white;
+    background-color: black;
+    border-radius: 25px;
+}
+
+/* ********************************************************************************************************************/
+/* ARENA */
+/* ********************************************************************************************************************/
+
+.arena_grid{
+    display: none;
+    /*display: grid;*/
+    grid-template-columns: repeat(3, 150px);
+    justify-content: space-evenly;
+    gap: 18px;
+    /* Se implenta cambio en propiedad desde JS para que dinámico */
+    /*background-color: transparent;*/
+}
+
+.battle_arena{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* Se implenta cambio en propiedad desde JS para que dinámico */
+    /*background-image: url('./img/Arena_1.png');*/
+}
+
+.celda{
+    width: 120px;
+    aspect-ratio: 1 / 1;
+    padding: 10px;
+    border: 2.5px solid gray;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Se implenta cambio en propiedad desde JS para que dinámico */
+    /*background-color: transparent;*/
+}
+
+/* ********************************************************************************************************************/
+/* CONTROLES */
+/* ********************************************************************************************************************/
+
+.contenedor_controles{
+    display: flex;
+    justify-content: space-evenly;
+    align-items:stretch;
+    gap: 20px;
+    max-height: 80px;
+}
+
+.contenedor_controles button{
+    min-width: 180px;
+    max-height: 80px;
+    background-color: white;
+    color: black;
+    border: 2.5px solid gray;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: "Orbitron", sans-serif;
+    font-size: 0.9rem;
+    transition: 0.2s ease;
+}
+
+.contenedor_controles button:hover{
+    border-color: black;
+    background-color: #f4f4f4;
+}
+
+.flechas{
+    min-width: 150px;
+    max-height: 80px;
+    border: 2.5px solid gray;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    font-size: 2rem;
+    background-color: white;
+}
+
+.cooldown{
+    min-width: 190px;
+    max-height:80px;
+    padding: 12px;
+    border: 2.5px solid gray;
+    border-radius: 8px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    gap: 12px;
+}
+
+.cooldown p{
+    text-align: center;
+    font-family: "Orbitron", sans-serif;
+    font-size: 0.9rem;
+}
+
+.barra_cooldown{
+    width: 200px;
+    height: 60px;
+    border: 2px solid rgba(0,0,0,0.25);
+    border-radius: 6px;
+    background-color: white;
+}
+
+/* ********************************************************************************************************************/
+/* BATTLE LOG */
+/* ********************************************************************************************************************/
+
+.contenedor_battle_log{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.battle_info{
+    flex: 0 0 calc(65% - 10px);
+    min-height: 170px;
+    padding: 16px;
+    background-color: white;
+    border: 2.5px solid gray;
+    border-radius: 8px;
+}
+
+.battle_resultado{
+    flex: 0 0 calc(35% - 10px);
+    min-height: 170px;
+    padding: 16px;
+    background-color: white;
+    border: 2.5px solid gray;
+    border-radius: 8px;
+}
+
+#log_eventos,
+#log_resultados{
+    max-height: 200px;
+    height: 100px;
+    overflow-y: auto;
+    background-color: lightseagreen;
+    color: black;
+    font-weight: 600;
+    padding: 10px;
+    border-color: black;
+    border: 2.5px solid black;
+    border-radius: 8px;
+    
+}
+
+/* ********************************************************************************************************************/
+/* RESPONSIVE */
+/* ********************************************************************************************************************/
+
+@media (max-width: 767px){
+
+    .menu_principal{
+        height: auto;
+        min-height: 60px;
+        padding: 10px 70px 10px 10px;
+    }
+
+    .titulo_menu{
+        font-size: 1rem;
+    }
+
+    .boton_tema{
+        right: 10px;
+        font-size: 0.75rem;
+        padding: 6px 10px;
+    }
+
+    .titulo_colapsable{
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    .contenedor_stage_1{
+        flex-direction: column;
+    }
+
+    .panel_stage_1{
+        flex: 1 1 100%;
+        min-height: 220px;
+    }
+
+    .arena_grid{
+        grid-template-columns: 1fr;
+    }
+
+    .contenedor_controles{
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .contenedor_battle_log{
+        flex-direction: column;
+    }
+
+    .battle_info,
+    .battle_resultado{
+        flex: 1 1 100%;
+    }
+    
+}

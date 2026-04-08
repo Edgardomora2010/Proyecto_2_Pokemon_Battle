@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<!-- Lenguaje por defecto -->
+<html lang="es">
+<head>
+  
+     <!-- NOTAS: En buena medida se reutilizó parte del código 
+                 HTML del proyecto anterior: Portafolio Profesional -->
+     <!-- Acoplando secciones en que está dividida la página: Single-Page
+          convenciones estéticas para la misma, en secciones, títulos,
+          recursos online, configuración, y aspecto general de página. -->
+  
+     <!-- CODIFICACION CARACTERES  -->
+        <meta charset="UTF-8"/>
+        
+        <!-- RESPONSIVE DESIGN -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <!-- SEO -->
+        <meta name="description" content="Página de Batalla Pokemon">
+        <meta name="keywords" content="html, pokemon, batalla">
+        <meta name="author" content="Edgardo Mora M">
+
+        <!-- TÍTULO DE PAGINA -->
+        <title>Mi Batalla Pokemon</title>
+        
+        <!-- ACCESIBILIDAD: IMPLEMENTACIÓN CSS (EN ARCHIVO INDEPENDIENTE) -->
+        <link rel="stylesheet" href="style.css">
+           
+        <!-- ACCESIBILIDAD: OTROS RECURSOS -->
+        
+        <!-- IMPLEMENTACIÓN DE FONTS (GOOGLE) -->
+        <!-- ORBITRON (PARA TITULOS H1, H2) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Ruda:wght@400..900&display=swap" 
+              rel="stylesheet">
+        
+        <!--  BEBAS NEUE (TITULO PRINCIPAL) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@400..900&family=Ruda:wght@400..900&display=swap" 
+              rel="stylesheet">
+    
+</head>
+<body>
+
+  <div class="pagina">
+
+     <!-- MENU/NAV PRINCIPAL -->
+            <nav class="menu_principal">
+              
+                <!-- Contenedor de menú -->
+                <div class="contenedor_elementos_menu">
+                  <h1 class="titulo_menu">My Pokemon Battle</h1>
+                  <!-- Elementos de menú -->
+                  <!-- Botón para cambiar entre modo claro y modo oscuro -->
+                  <button id="bttn_tema" class="boton_tema" type="button">Modo oscuro</button>
+                </div>
+                
+            </nav>
+    
+    <!-- HEADER: Decorativo de página con imagen de pokemon: Charizard -->
+    <header class="header_adorno">
+      <!-- Imagen de charizard para adornar aún más el header -->
+      <img src="./img/charizard.png" class="charizard">
+    </header>
+
+    <!-- STAGE 1 -->
+    
+    <!-- BLOQUE 1: Colapsable estilo acordeón para contener segmentos de la página -->
+    <details id = "bloque_stage_1" class="bloque_colapsable" open>
+      
+      <!-- Título de bloque -->
+      <summary class="titulo_colapsable">STAGE 1</summary>
+
+      <!-- SECTION 1: Para contener información de: pokemon seleccionado,
+                      pokemon enemigo y trainer card -->
+      <section class="stage_1">
+        
+        <!-- Subcontenedor de stage 1 -->
+        <div class="contenedor_stage_1">
+
+          <!-- Article: Con información del pokemón escogido -->
+          <article id="articulo_1" class="panel_stage_1">
+            
+            <!-- Contenedor para título de pokemón -->
+            <!-- Imagen y título centrados -->
+            <div class="contenedor_imagen">
+              
+              <!-- Objetos para contener información del pokemón escogido -->
+              <h3 id="titulo_player_panel">PLAYER PANEL</h3>
+              
+              <!-- Imagen -->
+              <img id="player_sprite" src="#" alt="pokemon">
+              
+            </div> <!-- Termina contenedor de imagen y título del pokemón -->
+            
+            <!-- Contenedor para paneles de información del pokemón, la idea -->
+            <!-- es que pueda tener 2 subpaneles verticales a manera de columnas -->
+            <div class="contenedor_info_texto">
+              
+              <!-- Sub-Panel 1: para dividir la iformación del pokemon, en 2 columnas -->
+              <div class="panel_columna_1">
+                
+                <!-- Nombre -->
+                <h4 id="player_name"></h4>
+                
+                <!-- Tipos -->
+                <p><strong>Tipo</strong></p>
+                <ul id="lista_player_types"></ul>
+                
+                <!-- Estadísticas -->
+                <div id="player_stats">
+                  
+                  <!-- <P> HP -->
+                  <p>HP: <span id="hp"></span></p>
+                  
+                  <!-- <P> Ataques -->
+                  <p>Ataques: <span id="attack"></span></p>
+                  
+                  <!-- <P> Defensa -->
+                  <p>Defensa: <span id="defense"></span></p>
+                  
+                  <!-- <P> Velocidad -->
+                  <p>Velocidad: <span id="speed"></span></p>
+                
+                </div> <!-- Termina mini-panel para información de estadísticas -->
+
+              </div> <!-- Termina sub-panel 1: para división de información en 2 columnas -->
+              
+              <!-- Sub-Panel 2: para dividir la iformación del pokemon, en 2 columnas -->
+              <div class="panel_columna_2">
+                
+                <p><strong>Movimientos</strong></p>
+                <!-- Lista: Movimientos -->
+                <ul id="lista_player_moves"></ul>
+              </div> <!-- Termina sub-panel 2 -->
+              
+            </div> <!-- Termina contenedor_info_texto -->
+            
+          </article>
+          
+          <!-- Article: Con información del TRAINER CARD -->
+          <article id="articulo_2" class="panel_stage_1">
+            
+            <h3>TRAINER CARD</h3>
+            
+            <!-- Info del: TRAINER -->
+            <div class="trainer_card_info">
+              <!-- <P> Nombre -->
+              <p><strong>Nombre:</strong> <span id="trainer_name"></span></p>
+              <!-- <P> Ciudad -->
+              <p><strong>Ciudad:</strong> <span id="trainer_town"></span></p>
+              <!-- <P> Frase -->
+              <p><strong>Frase:</strong> <span id="trainer_phrase"></span></p>
+              <!-- <P> Pokemon favorito -->
+              <p><strong>Pokémon favorito:</strong>
+              <span id="trainer_favorite_pokemon"></span></p>
+              <!-- <P> Apodo -->
+              <p><strong>Apodo:</strong> <span id="trainer_nickname"></span></p>
+              <!-- <P> Grito de batalla -->
+              <p><strong>Battle cry:</strong> <span id="trainer_battle_cry"></span></p>
+              <!-- <P> Movimiento definitivo -->
+              <p><strong>Movimiento definitivo:</strong> <span id="trainer_definitive_move"></span></p>
+              <!-- <P> Descripción movimiento -->
+              <p><strong>Flavor:</strong> <span id="trainer_definitive_flavor"></span></p>
+              <!-- <P> Mensaje de victoria -->
+              <p><strong>Victoria:</strong> <span id="trainer_win_message"></span></p>
+              <!-- <P> Mensaje de derrota -->
+              <p><strong>Derrota:</strong> <span id="trainer_lose_message"></span></p>
+            
+            </div>
+            
+            <!-- Contenedor para búsqueda de oponente -->
+            <div class="contenedor_busqueda">
+              
+              <div class="encabezado_busqueda">
+                <span>Búsqueda de oponente por nombre</span>
+              </div>
+              
+              <div class="modos_busqueda">  
+                <!-- Caja de texto para escribir nombre de oponente -->
+                <input type="text" id="txt_nombre_enemigo" 
+                       placeholder="Nombre del oponente..." autocomplete="off">
+                <span class="separador"> | </span>
+                
+                <!-- Botón de batalla -->
+                <button id="btn_buscar_oponente" class="btn_stage_1" type="button" enabled>
+                  Retar oponente!
+                </button>
+                
+                <!-- Espacio entre botón de iniciar batalla por oponente digitado y
+                     botón de empezar batalla al azar -->
+                <span class="separador"> | </span>
+                
+                <!-- Botón para selección random de oponente -->
+                <button id="btn_random" class="btn_stage_1" type="button">Al azar</button>  
+                
+                <!-- Botón para iniciar batalla -->
+                <button id="btn_iniciar_batalla" class="btn_stage_1" type="button" disabled>Empezar Batalla!</button>  
+              
+              </div> <!-- Termina modos de búsqueda -->
+              
+              <!-- Sugerencias de búsqueda -->
+              <ul id="resultados_busqueda"></ul>
+              <!-- Mensaje de error -->
+              <p id="error_busqueda"></p>
+              
+            </div> <!-- Termina contenedor_búsquedas -->
+            
+          </article> <!-- Termina article de pokemon elegido -->
+          
+          <!-- Article: Con información de pokemón enemigo/oponente -->
+          <article id="articulo_3" class="panel_stage_1">
+            
+            <!-- Contenedor para título de pokemón -->
+            <!-- Imagen y título centrados -->
+            <div class="contenedor_imagen">
+              
+              <!-- Objetos para contener información del enemigo -->
+              <h3 id="titulo_enemy_panel">ENEMY PANEL</h3>
+              
+              <!-- Imagen pokemón enemigo -->
+              <img id="enemy_sprite" src="./img/Question_mark.png" alt="pokemon">
+              
+            </div> <!-- Termina contenedor de imagen y título, de pokemon enemigo -->
+            
+            <!-- Contenedor para paneles de información del pokemón, la idea -->
+            <!-- es que pueda tener 2 subpaneles verticales a manera de columnas -->
+            <div class="contenedor_info_texto">
+              
+              <!-- Panel 1: para dividir la iformación del pokemon enemigo, en 2 columnas -->
+              <div class="panel_columna_1">
+                
+                <!-- Nombre pokemón enemigo -->
+                <h4 id="enemy_name"></h4>
+            
+                <p><strong>Tipo</strong></p>
+                <!-- Tipos pokemón enemigo -->
+                <ul id="lista_enemy_types"></ul>
+                
+                <!-- Estadísticas pokemón enemigo -->
+                <div class="enemy_stats">
+                  
+                  <!-- <P> HP -->
+                  <p><strong>HP:</strong> <span id="enemy_hp"></span></p>
+                  
+                  <!-- <P> Ataque -->
+                  <p><strong>Ataque:</strong> <span id="enemy_attack"></span></p>
+                  
+                  <!-- <P> Defensa -->
+                  <p><strong>Defensa:</strong> <span id="enemy_defense"></span></p>
+                  
+                  <!-- <P> Velocidad -->
+                  <p><strong>Velocidad:</strong> <span id="enemy_speed"></span></p>
+                    
+                  <!-- estatus de carga del enemigo -->
+                  <div id="enemy_status">
+                    <p id ="resultado_carga"><strong>Resultado:</strong></p>
+                    <img id="barra_carga" src="./img/Lupa.png">
+                  </div>
+                
+                </div> <!-- Termina mini-panel de estadísticas, del pokemon enemigo -->
+              
+              </div> <!-- Termina sub-Panel 1: para dividir la iformación del pokemon enemigo -->
+              
+              <!-- Panel 2: para dividir la iformación del pokemon enemigo, en 
+                   2 columnas -->
+              <div class="panel_columna_2">
+                <!-- Movimientos enemigo contenedor -->
+                <div class="enemy_moves">
+                  <p><strong>Movimientos</strong></p>
+                  <ul id="lista_enemy_moves"></ul>
+                </div>
+              </div> <!-- Termina sub-Panel 2 -->
+              
+            </div> <!-- Termina contenedor_info_texto -->
+        
+          </article>
+
+        </div> <!-- Termina contenedor_stage_1 -->
+
+      </section>
+    </details>
+
+    <!-- BLOQUE: STAGE 2 -->
+    <details id="bloque_stage_2" class="bloque_colapsable" close>
+      <!-- Título de bloque Stage 2 -->
+      <summary class="titulo_colapsable">STAGE 2</summary>
+
+      <!-- <SECTION> Sectión 2 para Batalla de pokemones seleccionados  -->
+      <section class="stage_2">
+
+        <!-- <Div> Para Arena de batalla  -->
+        <div id ="battle_arena" class="battle_arena">
+          <h3>BATTLE ARENA</h3>
+
+          <!-- <Div> HP real de batalla  -->
+          <div class="hp_status">
+            <!-- <Div> para pokemón player -->
+            <div id="hp_pokemon_status">Player: HP</div>
+            <!-- <Div> HP para pokemón eneny -->
+            <div id="hp_enemy_status">Oponente: HP</div>
+          </div>
+          
+          <!-- <Div> Grid de arena de batalla de (3 x 3)  -->
+          <div id="arena_grid" class="arena_grid">
+            <!-- <Div> Fila 1: Columnas (1,2,3) --> 
+            <!-- Celdas de la arena para el oponente -->
+            <div id ="enemy_cell_1" class="celda"></div>
+            <div id ="enemy_cell_2" class="celda"></div>
+            <div id ="enemy_cell_3" class="celda"></div>
+
+             <!-- <Div> Fila 2: Columnas (1,2,3) -->
+            <!-- Espacio vacío entre el jugador y el oponente -->
+            <div class="celda"></div>
+            <div class="celda"></div>
+            <div class="celda"></div>
+
+            <!-- <Div> Fila 3: Columnas (1,2,3) -->
+            <!-- Celdas de la arena en las que se moverá el jugador -->
+            <div id="player_cell_1" class="celda"></div>
+            <div id="player_cell_2" class="celda"></div>
+            <div id="player_cell_3" class="celda"></div>
+            
+          </div>
+          
+        </div>
+
+        <div class="controles">
+          <h3>CONTROLES</h3>
+
+          <div class="contenedor_controles">
+            <button type="button">ATAQUE</button>
+            
+              <div id= "cont_flechas" class="flechas">
+                <span>←</span><span>→</span>
+              </div>
+      
+            <button type="button">ATAQUE DEFINITIVO</button>
+
+            <div class="cooldown">
+              <p>COOL DOWN</p>
+              <div class="barra_cooldown"></div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </details>
+
+    <!-- BLOQUE BATTLE LOG: Detalle de jugadas, ataques y resultados de batalla -->
+    <details id = "bloque_log" class="bloque_colapsable" close>
+      <!-- Título colapsable de sección -->
+      <summary class="titulo_colapsable">BATTLE LOG</summary>
+ 
+      <!-- Sección de Battle Log -->
+      <section class="seccion_battle_log">
+        <div class="contenedor_battle_log">
+          <!-- Article de sección -->
+          <article class="battle_info">
+            <h3>BATTLE INFO</h3>
+            <!-- Area de log eventos del juego -->
+            <div id = "log_eventos">
+            </div>
+            
+          </article>
+
+          <article class="battle_resultado">
+            <h3>BATTLE RESULTADO</h3>
+             <!-- Area de log de resultado de juego -->
+            <div id = "log_resultados">
+            </div>
+          </article>
+        </div>
+      </section>
+    </details>
+
+    <!-- FOOTER: Decorativo de página con imagen de pokemon: Charmander -->
+    <footer class="footer_adorno">
+      <!-- Imagen de charizard para adornar aún más el footer -->
+      <img src="./img/charmander.png" class="charmander">
+    </footer>
+
+  </div>
+  
+  <!-- Recomendación de posicionamiento del Javascript de acuerdo con material
+       de clases -->  
+  <!-- Scripts JS: Código principal para manipulación de página, este se encarga
+       de interactuar con: trainer.config.js, api.js y render.js -->
+  <script type="module" src="./main.js"></script>
+
+</body>
+  
+</html>
