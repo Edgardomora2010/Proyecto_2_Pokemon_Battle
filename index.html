@@ -7,7 +7,8 @@
                  HTML del proyecto anterior: Portafolio Profesional -->
      <!-- Acoplando secciones en que está dividida la página: Single-Page
           convenciones estéticas para la misma, en secciones, títulos,
-          recursos online, configuración, y aspecto general de página. -->
+          articulos, recursos online, configuración, y aspecto 
+          general de página. -->
   
      <!-- CODIFICACION CARACTERES  -->
         <meta charset="UTF-8"/>
@@ -51,7 +52,10 @@
               
                 <!-- Contenedor de menú -->
                 <div class="contenedor_elementos_menu">
+                  
+                  <!-- Título en barra de menú -->
                   <h1 class="titulo_menu">My Pokemon Battle</h1>
+                  
                   <!-- Elementos de menú -->
                   <!-- Botón para cambiar entre modo claro y modo oscuro -->
                   <button id="bttn_tema" class="boton_tema" type="button">Modo oscuro</button>
@@ -61,13 +65,14 @@
     
     <!-- HEADER: Decorativo de página con imagen de pokemon: Charizard -->
     <header class="header_adorno">
-      <!-- Imagen de charizard para adornar aún más el header -->
-      <img src="./stage-1/img/Charizard.png" class="charizard">
+      <!-- Imagen de charizard para adornar aún más el header de página -->
+      <img src="./stage-1/img/Charizard.png" class="charizard" alt="">
     </header>
 
     <!-- STAGE 1 -->
     
-    <!-- BLOQUE 1: Colapsable estilo acordeón para contener segmentos de la página -->
+    <!-- BLOQUE 1 STAGE 1: Colapsable estilo acordeón para contener segmentos de la página -->
+    <!-- STAGE 1: Abierto por defecto -->
     <details id = "bloque_stage_1" class="bloque_colapsable" open>
       
       <!-- Título de bloque -->
@@ -90,8 +95,8 @@
               <!-- Objetos para contener información del pokemón escogido -->
               <h3 id="titulo_player_panel">PLAYER PANEL</h3>
               
-              <!-- Imagen -->
-              <img id="player_sprite" src="#" alt="pokemon">
+              <!-- objeto imagen para pokemon favorito -->
+              <img id="player_sprite" src="./stage-1/img/Question_mark.png" alt="Sprite del pokemón jugador">
               
             </div> <!-- Termina contenedor de imagen y título del pokemón -->
             
@@ -174,6 +179,7 @@
             <!-- Contenedor para búsqueda de oponente -->
             <div class="contenedor_busqueda">
               
+              <!-- Encabezado para búsqueda de oponente -->
               <div class="encabezado_busqueda">
                 <span>Búsqueda de oponente por nombre</span>
               </div>
@@ -181,11 +187,12 @@
               <div class="modos_busqueda">  
                 <!-- Caja de texto para escribir nombre de oponente -->
                 <input type="text" id="txt_nombre_enemigo" 
-                       placeholder="Nombre del oponente..." autocomplete="off">
+                       placeholder="Nombre del oponente..." autocomplete="off"
+                       aria-label="Nombre del oponente">
                 <span class="separador"> | </span>
                 
                 <!-- Botón de batalla -->
-                <button id="btn_buscar_oponente" class="btn_stage_1" type="button" enabled>
+                <button id="btn_buscar_oponente" class="btn_stage_1" type="button">
                   Retar oponente!
                 </button>
                 
@@ -221,7 +228,7 @@
               <h3 id="titulo_enemy_panel">ENEMY PANEL</h3>
               
               <!-- Imagen pokemón enemigo -->
-              <img id="enemy_sprite" src="./stage-1/img/Question_mark.png" alt="pokemon">
+              <img id="enemy_sprite" src="./stage-1/img/Question_mark.png" alt="Sprite del pokemón oponente">
               
             </div> <!-- Termina contenedor de imagen y título, de pokemon enemigo -->
             
@@ -257,7 +264,7 @@
                   <!-- estatus de carga del enemigo -->
                   <div id="enemy_status">
                     <p id ="resultado_carga"><strong>Resultado:</strong></p>
-                    <img id="barra_carga" src="./stage-1/img/Lupa.png">
+                    <img id="barra_carga" src="./stage-1/img/Lupa.png" alt="Indicador de carga">
                   </div>
                 
                 </div> <!-- Termina mini-panel de estadísticas, del pokemon enemigo -->
@@ -327,38 +334,62 @@
           
         </div>
 
+        <!-- Objetos de control (botones, flechas), para movimiento de pokemón -->
         <div class="controles">
           <h3>CONTROLES</h3>
 
+          <!-- Subcontenedor de objetos de control -->
           <div class="contenedor_controles">
-            <button type="button">ATAQUE</button>
             
-              <div id= "cont_flechas" class="flechas">
+            <button id="btn_ataque_simple" type="button">ATAQUE SIMPLE</button>
+            
+            <!-- cotenedor de Indicación y flechas -->
+            <div class="flechas">
+              
+              <!-- Indicaciones de uso de flechas con teclado -->
+              <div id="indicacion_flechas">Utilice teclado para moverse</div>
+              
+              <!-- Subcotenedor de flechas solo representación gráfica -->
+              <div id="cont_flechas">
+                
+                <!-- Separación de flechas con span -->
                 <span>←</span><span>→</span>
-              </div>
-      
-            <button type="button">ATAQUE DEFINITIVO</button>
-
+                
+              </div> <!-- Termina subcontenedro de flechas -->
+              
+            </div> <!-- Termina contenedor class:flechas -->
+            
+            <!-- Botón de ataque definitivo -->
+            <button id="btn_ataque_definitivo" type="button">ATAQUE DEFINITIVO</button>
+            
+            <!-- Contenedor de cooldown -->
             <div class="cooldown">
               <p>COOL DOWN</p>
               <div class="barra_cooldown"></div>
-            </div>
-          </div>
-        </div>
+            </div> <!-- Termina contenedor de cooldown -->
+            
+          </div> <!-- Termina contenedor de controles: contenedor_controles -->
+          
+        </div> <!--Termina contenedor principal: class:controles -->
 
-      </section>
+      </section> 
     </details>
 
     <!-- BLOQUE BATTLE LOG: Detalle de jugadas, ataques y resultados de batalla -->
     <details id = "bloque_log" class="bloque_colapsable">
+      
       <!-- Título colapsable de sección -->
       <summary class="titulo_colapsable">BATTLE LOG</summary>
  
       <!-- Sección de Battle Log -->
       <section class="seccion_battle_log">
+        
+        <!-- contenedor Battle Log -->
         <div class="contenedor_battle_log">
-          <!-- Article de sección -->
+          
+          <!-- Article de sección para log de eventos de juego-->
           <article class="battle_info">
+            <!-- Título -->
             <h3>BATTLE INFO</h3>
             <!-- Area de log eventos del juego -->
             <div id = "log_eventos">
@@ -366,7 +397,9 @@
             
           </article>
 
+           <!-- Article de sección para resultados de batalla -->
           <article class="battle_resultado">
+            <!-- Título -->
             <h3>BATTLE RESULTADO</h3>
              <!-- Area de log de resultado de juego -->
             <div id = "log_resultados">
@@ -379,7 +412,7 @@
     <!-- FOOTER: Decorativo de página con imagen de pokemon: Charmander -->
     <footer class="footer_adorno">
       <!-- Imagen de charizard para adornar aún más el footer -->
-      <img src="./stage-1/img/Charmander.png" class="charmander">
+      <img src="./stage-1/img/Charmander.png" class="charmander" alt="">
     </footer>
 
   </div>

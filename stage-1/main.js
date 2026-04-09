@@ -5,6 +5,7 @@
  * Proyecto No. 2:  My Pokemon Battle
  * Tema: Programación de Javascript, HTML,CSS
  * Peticiones a API's.
+ * Archivo: (JAVASCRIPT)/JS (main.js)
  * Profesor: Jose Pablo Garbanzo
  * Autor: Edgardo Mora M.
  * Fecha: 12-04-2026
@@ -13,10 +14,10 @@
 // ******************************************************************************************
 // IMPORTS: FUNCIONES EN: RENDER.JS, TRAINER.CONFIG.JS 
 // 
-// Se importan funciones en archivo render.js para poder accesar y actualizar objetos
-// visuales de la página. También datos en el archivo trainer.config.js
+//  Se importan funciones necesaria de otros archivos como:  render.js para poder accesar
+//  y actualizar objetos visuales de la página. 
+//  También datos en el archivo trainer.config.js
 // ******************************************************************************************
-//
 //
 // ******************************************************************************************
 // STAGE-1:
@@ -36,19 +37,19 @@ import TRAINER from '../trainer.config.js';            // Devuelve datos del tra
 // ******************************************************************************************
 // STAGE-2:
 // ******************************************************************************************
-import { iniciar_Batalla } from './battle.js';
+import { iniciar_Batalla } from './battle.js';          // Función para iniciar batalla (Stage 2)
+import { limpiar_Batalla_Anterior } from './battle.js'; // Función para limpiar batalla (Srage 2)
 // ******************************************************************************************
-
 
 // ******************************************************************************************
 // OBJETOS DE USO GLOBAL
 // ******************************************************************************************
 
-// ESTADO GLOBAL
+// OBJETOS GLOBALES: para manejo de estados.
 const state = {
-    player: null,
-    trainer: null,
-    enemy: null
+    player: null,    // Pokemón favorito
+    trainer: null,   // Trainer card
+    enemy: null      // Pokemón contrincante
 };
 
 // OBJETOS PARA ALMACENAR DATOS
@@ -60,55 +61,121 @@ let controller_busqueda = null;
 // ESTADO GLOBAL DE BATALLA
 let controlDatosBatalla = null;
 
-// ARREGLOS
+// ARREGLOS (Nombres completos)
 let lista_completa_pokemones = [];
 
 // OBJETOS GENERALES DEL HTML/DOM
-const pagina = document.body;
-const oponente_seleccianado = document.getElementById("txt_nombre_enemigo");
-const botonTema = document.getElementById('bttn_tema');
-const botonBuscarOponente = document.getElementById('btn_buscar_oponente');
-const botonBuscarAlAzar   = document.getElementById('btn_random');
-const botonIniciarBatalla = document.getElementById('btn_iniciar_batalla');
-const listaResultadosBusqueda = document.getElementById('resultados_busqueda');
-const lblMensajeError  =   document.getElementById('error_busqueda');
-
-//
+const pagina = document.body;                                                   // Página general
+const oponente_seleccianado = document.getElementById("txt_nombre_enemigo");    // Nombre oponente
+const botonTema = document.getElementById('bttn_tema');                         // Bóton claro/oscuro  
+const botonBuscarOponente = document.getElementById('btn_buscar_oponente');     // Botón buscar oponente
+const botonBuscarAlAzar   = document.getElementById('btn_random');              // Botón buscar oponente random
+const botonIniciarBatalla = document.getElementById('btn_iniciar_batalla');     // Botón iniciar batalla
+const listaResultadosBusqueda = document.getElementById('resultados_busqueda'); // Lista de sugerencias pokemones
+const lblMensajeError  =   document.getElementById('error_busqueda');           // Mensaje de error, pokemón no encontrado
+const bloqueStage2 = document.getElementById("bloque_stage_2");                 // Bloque/Sección colapsable para Stage 2
+const bloqueLog    = document.getElementById("bloque_log");                     // Bloque/Sección colapsable para Log de juego
+// ******************************************************************************************
 // ******************************************************************************************
 
 
 // ******************************************************************************************
-// FUNCIONES RELACIONADAS CON ALMACENAMIENTO DE DATOS DEL NAVEGADOR
+// FUNCIÓN PRINCIPAL: Carga con el inicio de página, el DOM
+// el pokemón favorito, y los datos de Trainer card
 // ******************************************************************************************
 
-// Función para guardar datos del último Pokemón seleccionado, y que este se mantenga tras
-// cerrar navegador
-function guardar_Local_Storage(clave,valor)
-{ 
-    if (valor !== ""){
-        window.localStorage.setItem(clave,valor);
+async function init() {
+    
+    try {
+        
+        // Carga todos los nombres de los pokemones, solicitándolos
+        // a la API. Esto para poder crear una búsqueda sugerida real
+        // a la hora de buscar por nombres
+        // Según documentación de la API, se pueden solicitar 1000 pokemones
+        // en un solo Fetch
+        await request_todos_Nombres_Pokemones(1000);
+        
+        // Solicitud de datos al trainer.config.js
+        trainer_datos = TRAINER;
+        // Guadar estado (trainer)
+        state.trainer = trainer_datos;
+         // Actualizar Interfaz Gráfica (IU)
+        render_Trainer_Panel(state.trainer);
+        
+        // Solicitud de datos a la API para nuestro pokemon 
+        player_datos = await request_Pokemon(trainer_datos.favoritePokemon);
+        // Guadar estado (player)
+        state.player = player_datos;
+        // Actualizar Interfaz Gráfica (IU)
+        render_Player_Panel(state.player);
+        
+        // Lee datos guardado del último pokemón oponente buscado y los
+        // asigna
+        const enemigo = obtener_Local_Storage("enemigo");
+        
+        // Si el enemigo es válido (llave y valor)
+        if (enemigo){
+            // Se asigna nombre del último pokemón buscado al componente html
+            // de búsqueda de oponente
+            oponente_seleccianado.value = enemigo;
+        }
+
+        // Estado inicial de botón de iniciar batalla
+        botonIniciarBatalla.disabled = true;
+        bloqueStage2.open = false;
+        bloqueLog.open = false;
+
+        // Registro de eventos luego de que el DOM y datos iniciales existen
+        oponente_seleccianado.addEventListener('keyup', buscarConDebounce);
+        
+    // Si ocurre un error en la carga de los datos
+    } catch (error) {
+        console.error(error);
     }
     
+}
+// ******************************************************************************************
+// ******************************************************************************************
+
+
+// ******************************************************************************************
+// FUNCIONES RELACIONADAS CON ALMACENAMIENTO DE DATOS DEL NAVEGADOR EN (WINDOWS.LOCALSTORAGE)
+// ******************************************************************************************
+
+// Función para guardar datos del último Pokemón seleccionado
+function guardar_Local_Storage(clave, valor)
+{   
+    // Si no hay valor válido, no guarda
+    if (valor === "" || valor === null) return;
+    // Se guarda el valor en localStorage
+    window.localStorage.setItem(clave, valor);
 }
 
 // Función para obtener datos guardados del último Pokemón seleccionado, y que este se
 // mantenga tras cerrar navegador
 function obtener_Local_Storage(clave){ 
     
+    // Si la clave no es un valor válido, se aborta lectura de clave almacenada
+    if (!clave) return;
+    // Si la clave es válida, se obtiene valor almacenado.
     const valor = window.localStorage.getItem(clave); 
     return valor;
-    
 }
 
 // Función para eliminar datos guardados del último Pokemón seleccionado, y que este se
 // mantenga tras cerrar navegador
 function eliminar_Local_Storage(clave){ 
     
+    // Si la clave no es un valor válido, se aborta lectura de clave almacenada
+    if (!clave) return;
+    // Si la clave es válida, se elimina valor almacenado.
     const valor = window.localStorage.removeItem(clave); 
     return valor;
-
 }
 
+// Función para carga datos de: (player, enemy, trainer) desde localStorage,
+// valida su integridad y recupera el estado inicial de los objetos para  
+// preparar una batalla.
 function cargar_Datos_Batalla(llave){
     
     // Se llama a función de lectura de datos en almacenamiento local
@@ -118,37 +185,49 @@ function cargar_Datos_Batalla(llave){
         return null;
     }
     
+    let estado_Pokemones;
+    
     // Si si existen datos válidos, se convierte string JSON en objeto real
-    const estado_Pokemones = JSON.parse(datos_guardados);
+    try {
+        estado_Pokemones = JSON.parse(datos_guardados);
+    } catch (error) {
+        console.error("Error leyendo estado_Pokemones:", error);
+        return null;
+    }
     
     // Si faltan datos importantes, retorna null y aborta carga
     if (!estado_Pokemones.player || !estado_Pokemones.enemy || !estado_Pokemones.trainer) {
         return null;
     }
     
-    // Crea el estado real de la pelea
+    // Crea el estado real para la batalla
     controlDatosBatalla = {
         
-        // Datos base heredados desde Stage 1, y coservados en el local storage
-        // sirve si se desea pasar datos entre páginas, para este caso se utilizó sigle
-        // page sin embargo es importante hacer uso de estructura de almacenamiento
+        // Se obtiene datos base heredados desde Stage 1, y coservados en el local storage
+        // sirve si se desea pasar datos entre páginas, para este caso se utilizó sigle-page
+        // sin embargo se respecta enunciado sobre lectura del estado de los objetos mediante
+        // el localstorage
+        
+        // Datos completos de los 3 paneles (pokemón favorito/trainer card/enemigo)
         player: estado_Pokemones.player,
         enemy: estado_Pokemones.enemy,
         trainer: estado_Pokemones.trainer,
     
-        // HP reales de batalla
+        // Se crean valores de HP (puntos de vida) reales para batalla
         playerHP: Math.floor(estado_Pokemones.player.stats.hp * 2.5),
         enemyHP: Math.floor(estado_Pokemones.enemy.stats.hp * 2.5),
         
-        // Posiciones en arena
+        // Se inicia pokemones en matrix (arena) de (3x3), en posición 2 (centro)
         playerPosition: 2,
         enemyPosition: 2,
         
         // Ataque enemigo actual
         incomingAttack: null,
         
-        // Control de pelea
+        // Control de batalla (bloqueo)
         locked: false,
+        
+        // estados o banderas 
         definitiveUsed: false,
         attackOnCooldown: false,
         
@@ -159,28 +238,26 @@ function cargar_Datos_Batalla(llave){
         log: []
     };
     
+    // Retorna objeto listo para una batalla (core del stage 2)
     return controlDatosBatalla;
-    
 }
-
-//
+// ******************************************************************************************
 // ******************************************************************************************
 
 
 // ******************************************************************************************
-// FUNCIONES GENERALES DE INTERACCIÓN Y COMUNICACIÓN
-// CON EL API.JS, EL RENDER.JS PARA LA VISUALIZACIÓN
+// FUNCIONES: REQUEST GENERALES DE INTERACCIÓN Y COMUNICACIÓN CON EL API.JS, 
 // Y EL TRAINER.CONFIG.JS
 // ******************************************************************************************
 
-// Función general para comunicarse con el API para obtener
-// los datos de cualquier Pokemón.
+// Función general para comunicarse con el Poke-API para obtener los datos de 
+// cualquier Pokemón.
 async function request_Pokemon(nombre_pokemon, signal = null) {
     try {
         // Llama a función de la API para traer datos del
         // Pokemón deseado
         const datos = await get_Pokemon(nombre_pokemon, signal);
-        // Retorna conjunto de datos requeridos
+        // Retorna conjunto de datos requeridos del pokemón solicitado
         return datos;
         
     // Si ocurre un error en la carga de los datos
@@ -192,36 +269,54 @@ async function request_Pokemon(nombre_pokemon, signal = null) {
             return null;
         }
         
+        // Se lanza error
         console.error(error);
         return null;
         
     }
+    
 }
 
+// Función devuelve un arreglo con una cantidad determinada de Pokemones, dentro de la 
+// documentación del Poke-Api e investigación se leyó que se pueden solicitar hasta 1000
+// por fetch, por lo tanto el motivo de esta función es conocer una buena cifra de pokemones
+// antes de sugerir nombres similares mediante la función debounce.
 async function request_todos_Nombres_Pokemones(cantidadLimite){
     
     try {
-        // Carga lista completa de pokemones para suggestions
+        // Carga lista bastante completa de pokemones para suggestions
         const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=" + cantidadLimite);
+        
+        if (!res.ok) {
+            throw new Error("No se pudo obtener la lista de pokemones.");
+        }
+        
         const data = await res.json();
-        // Solo guardamos nombres
+        // Solo guardamos nombres en un arreglo
         lista_completa_pokemones = data.results.map(p => p.name);
+        // Pruebas
         console.log(lista_completa_pokemones);
         }
+    
     catch (error)
+        
     {
+        // Se lanza error
         console.error("Error cargando lista completa de pokemones:", error);
     }
     
 }
+// ******************************************************************************************
+// ******************************************************************************************
+
 
 // ******************************************************************************************
-// FUNCIONES AUXILIARES: DEBOUNCE, RESTARGUMENTS, Y OTRAS
+// FUNCIONES AUXILIARES: DEBOUNCE, REST_ARGUMENTS, Y OTRAS
 // ******************************************************************************************
 
 // Función auxiliar que permite a otra función recibir múltiples argumentos
 // agrupándolos en un arreglo ("rest") Se usa internamente por debounce para
-//  manejar parámetros dinámicos.
+//  manejar parámetros dinámicos. Se mantiene idéntico al uso dado en clases.
 function restArguments(func, startIndex) {
     startIndex = startIndex == null ? func.length - 1 : +startIndex;
     return function() {
@@ -245,8 +340,9 @@ function restArguments(func, startIndex) {
     };
 }
 
-// Retrasa la ejecución de una función hasta que el usuario deja de interactuar.
-// Evitando múltiples ejecuciones consecutivas.
+// Función para Retrasar la ejecución de una función hasta que el usuario deja 
+// de interactuar. Evitando múltiples ejecuciones consecutivas de búsqueda.
+// Se mantiene idéntico al uso dado en clases.
 function debounce(func, wait, immediate) {
     var timeout, previous, args, result, context;
 
@@ -285,16 +381,25 @@ function debounce(func, wait, immediate) {
 // de los pokemones.
 const buscarConDebounce = debounce(async function () {
 
+    // El nombre del pokemón buscado, garantizando que no haya espacios en
+    // blanco y que el nombre sea en minúscula
     const nombre = oponente_seleccianado.value.trim().toLowerCase();
+
+    // Al escribir un nuevo nombre, se invalida la batalla anterior confirmada
+    resetear_Stage_2();
+    // Se deshabilita botón de batalla para evitar pelear con datos anteriores
+    botonIniciarBatalla.disabled = true;
 
     // Si no hay texto digitado, limpia sugerencias y resetea estado enemigo
     if (!nombre) {
+        
         listaResultadosBusqueda.innerHTML = "";
         state.enemy = null;
         enemy_datos = null;
         render_Enemy_Panel(state.enemy);
         render_carga_resultados(1,"No se encontraron datos.");
         botonIniciarBatalla.disabled = true;
+        
         return;
     }
 
@@ -307,10 +412,16 @@ const buscarConDebounce = debounce(async function () {
     controller_busqueda = new AbortController();
 
     // Filtra nombres de pokemones ya cargados en memoria local
+    // La sugerencia se hace contra arreglo de pokemones, con nombres
+    // precargados y conocidos, ya que contra el API, lo que devuelve
+    // es un conjunto de todos los datos de un pokemon o varios
     const sugerencias = lista_completa_pokemones
+         // Donde los nombres en arreglo de pokemones, coincidan
+         // con lo digitado
         .filter(pokemon => pokemon.startsWith(nombre))
         .slice(0, 8);
 
+    // Muestra elementos coincidentes
     console.log("Sugerencias encontradas:", sugerencias);
 
     // Limpia lista visual anterior
@@ -332,6 +443,7 @@ const buscarConDebounce = debounce(async function () {
         item.textContent = nombrePokemon;
         item.style.cursor = "pointer";
 
+        // Le agrega lister al elemento para poderle dar click
         item.addEventListener("click", async () => {
             
             // Si había una petición anterior en proceso, la cancela
@@ -342,20 +454,42 @@ const buscarConDebounce = debounce(async function () {
             // Crea nuevo controlador para la petición seleccionada
             controller_busqueda = new AbortController();
             
-            oponente_seleccianado.value = nombrePokemon;
-            listaResultadosBusqueda.innerHTML = "";
-            render_carga_resultados(0,"Cargando datos...");
+            // Al seleccionar nueva sugerencia, se invalida batalla anterior confirmada
+            resetear_Stage_2();
+            // Se deshabilita botón de batalla
+            botonIniciarBatalla.disabled = true;
 
+            // Asigna elemento clickead, a campo input de texto de búsqueda de pokemón
+            oponente_seleccianado.value = nombrePokemon;
+            // Limpia lista de resultados
+            listaResultadosBusqueda.innerHTML = "";
+            
+            // Una vez establecido el pokemón que se desea solicitar a la Poke-Api, se
+            // inicia proceso de carga o espera, llamando a función que muestra barra 
+            // de carga
+            render_carga_resultados(0,"Cargando datos...");
             // Solicita datos reales del pokemón seleccionado
             enemy_datos = await request_Pokemon(nombrePokemon, controller_busqueda.signal);
 
+            // Si el API devuelve datos válidos
             if (enemy_datos) {
+                // Se actualiza objeto de estado para el enemigo
                 state.enemy = enemy_datos;
+                // Se llama a función que llena detalles de enemigo (movimientos, HP, etc)
                 render_Enemy_Panel(state.enemy);
+                // Se vuelve a llamar a función de barra de carga, está vez ocultándola, y
+                // indicando éxito
                 render_carga_resultados(1,"Datos cargados con éxito.");
+                // Se guarda última búsqueda de pokemón enemigo efectiva, en localstorage
+                // para que pueda ser recordada tras cerrar navegador.
                 guardar_Local_Storage("enemigo",nombrePokemon);
                 lblMensajeError.textContent = "";
-                botonIniciarBatalla.disabled = false;
+                
+                // No se habilita batalla aquí, se obliga a confirmar con botón 
+                // "Retar oponente"
+                botonIniciarBatalla.disabled = true;
+                
+            // Si los datos no son válidos, se limpian objetos
             } else {
                 state.enemy = null;
                 enemy_datos = null;
@@ -370,81 +504,45 @@ const buscarConDebounce = debounce(async function () {
     });
 
 }, 400);
-//
-// ******************************************************************************************
 
-
-// FUNCIÓN PRINCIPAL: Carga con el inicio de pagina el DOM
-// Los el pokemón favorita, y los datos de Trainer card
-async function init() {
+// Método para limpiar objetos en stage 2, producto de una batalla previa.
+function resetear_Stage_2(){
     
-    try {
-        
-        // Carga todos los nombres de los pokemones, solicitándolos
-        // a la API. Esto para poder crear una búsqueda sugerida real
-        // a la hora de buscar por nombres
-        // Según documentación de la API, se pueden solicitar 1000 pokemones
-        // en un solo Fetch
-        await request_todos_Nombres_Pokemones(1000);
-        
-        // Solicitud de datos al trainer.config.js
-        trainer_datos = TRAINER;
-        // Guadar estado
-        state.trainer = trainer_datos;
-         // Actualizar Interfaz Gráfica (IU)
-        render_Trainer_Panel(state.trainer);
-        
-        // Solicitud de datos a la API para nuestro pokemon 
-        player_datos = await get_Pokemon(trainer_datos.favoritePokemon);
-        // Guadar estado
-        state.player = player_datos;
-        // Actualizar Interfaz Gráfica (IU)
-        render_Player_Panel(state.player);
-        
-        // Lee datos guardado del último pokemón oponente buscado y los
-        // asigna
-        const enemigo = obtener_Local_Storage("enemigo");
-        
-        // Si el enemigo es válido (llave y valor)
-        if (enemigo){
-            // Se asigna nombre del último pokemón buscado al componente html.
-            oponente_seleccianado.value = enemigo;
-        }
+    // Limpia objetos sucios por batalla anterior 
+    limpiar_Batalla_Anterior();
+    // Se cierran bloques visuales de batalla previa
+    bloqueStage2.open = false;
+    bloqueLog.open = false;
 
-        // Estado inicial de botón de iniciar batalla
-        botonIniciarBatalla.disabled = true;
-        
-        // Registro de eventos luego de que el DOM y datos iniciales existen
-        oponente_seleccianado.addEventListener('keyup', buscarConDebounce);
-        
-    // Si ocurre un error en la carga de los datos
-    } catch (error) {
-        console.error(error);
-    }
-    
+    // Se eliminan datos previos de batalla almacenados
+    eliminar_Local_Storage("estado_Pokemones");
 }
+// ******************************************************************************************
+// ******************************************************************************************
 
 
 // ******************************************************************************************
-// MANEJADORES DE EVENTOS PARA COMPONENTES DEL DOM
+// FUNCIONES DE MANEJO DE EVENTOS Y COMPORTAMIENTO DE OBJETOS (EVENTLISTENERS())
 // ****************************************************************************************** 
 
-// AUTOARRANQUE: Al ejecutarse la página, DOM, invoca init
+// AUTOARRANQUE: Al ejecutarse la página, DOM, invoca función principal (init)
 document.addEventListener('DOMContentLoaded', init);
     
 // Método de comportamiento (click) de botón de cambio de tema/estilo 
 // de página. (Modo Claro/oscuro)
 botonTema.addEventListener('click', () => {
-    
+   
     const oscuroActivo = pagina.classList.contains('tema_oscuro');
     console.log(oscuroActivo);
     // Llama a función de cambio de estilo, en render.js
-    cambiar_Modo_pagina(oscuroActivo);
-    
+    cambiar_Modo_pagina(oscuroActivo);    
 });
 
 // Método de comportamiento (click) de botón de buscar oponente
 botonBuscarOponente.addEventListener('click', async () => {
+    
+    // Resetea componentes sucios en stage 2 si ha existido una batalla previa
+    resetear_Stage_2();
     
     // Se garantiza que el nombre escrito del pokemón oponente, no tenga espacios
     // al inicio o final, y que sea en minúscula
@@ -453,6 +551,7 @@ botonBuscarOponente.addEventListener('click', async () => {
     // Se valida que el nombre del pokemón escrito, no sea un valor vacío
     if (nombre_oponente === '')
     {
+        // Limpia objetos si la búsqueda es vacía
         lblMensajeError.textContent = "Por favor debe ingresar un nombre de Pokemón válido.";
         state.enemy = null;
         enemy_datos = null;
@@ -464,29 +563,28 @@ botonBuscarOponente.addEventListener('click', async () => {
         
          try {
              
+             // simula búsqueda (barra de carga de datos)
              render_carga_resultados(0,'Cargando datos...');
-             
              // Solicita de datos a la API para nuestro pokemón
              enemy_datos = await request_Pokemon(nombre_oponente);
              
              // Si el pokemón existe y devolvió datos válidos
              if (enemy_datos) {
                  
-                 // Guada estado
+                 // Guada estado (enemy)
                  state.enemy = enemy_datos;
-                 
                  // Actualiza Interfaz Gráfica (IU)
                  render_Enemy_Panel(state.enemy);
                  render_carga_resultados(1,"Datos cargados con éxito.");
                  guardar_Local_Storage("enemigo",nombre_oponente);
                  lblMensajeError.textContent = "";
                  
-                // Si los objetos de estado de los datos no tiene información válida, no se sigue
-                // con batalla.
+                // Si los objetos de estado de los datos no tiene información válida,
+                //  no se sigue con batalla.
                 if(!state.player){ return; }
                 if(!state.enemy) { return; }
                  
-                 // objeto para almacenar datos en almacenamiento local 
+                 // Si son vpalidos, se actualiza en almacenamiento local 
                  const estado_Pokemones = {
                      player: state.player,
                      enemy: state.enemy,
@@ -495,8 +593,11 @@ botonBuscarOponente.addEventListener('click', async () => {
                  
                  // Se guardó nombre del último pokemón digitado que trajo datos 
                  guardar_Local_Storage("enemigo",enemy_datos.name);
-                 // Se guardan datos de los pokemones y trainer para iniciar batalla
+                 
+                 // Se guardan datos del pokemon favorito, oponente y trainer 
+                 // para iniciar batalla (listo)
                  guardar_Local_Storage("estado_Pokemones", JSON.stringify(estado_Pokemones));
+                 
                  // Se habilita botón de batalla dado que ambos pokemones favorito y
                  // oponente cumplen para la batalla
                  botonIniciarBatalla.disabled = false;
@@ -517,6 +618,7 @@ botonBuscarOponente.addEventListener('click', async () => {
         
     // Si ocurre un error en la carga de los datos
     } catch (error) {
+        
         console.error(error);
         state.enemy = null;
         enemy_datos = null;
@@ -524,15 +626,17 @@ botonBuscarOponente.addEventListener('click', async () => {
         render_carga_resultados(1,"No se encontraron datos.");
         lblMensajeError.textContent = "Ocurrió un error al buscar el Pokemón.";
         botonIniciarBatalla.disabled = true;
+        
     }
            
     }
             
 });
     
-// Método de comportamiento (click) de botón para buscar oponentes al azar
+// Método de comportamiento (click) de botón para buscar oponentes al azar (random)
 botonBuscarAlAzar.addEventListener('click', async () => {
     
+    resetear_Stage_2();
     // Actualiza datos de búsqueda
     render_carga_resultados(0,"Cargando datos...");
     
@@ -560,20 +664,11 @@ botonBuscarAlAzar.addEventListener('click', async () => {
          if(!state.player){ return; }
         if(!state.enemy) { return; }
         
-        // objeto para almacenar datos en almacenamiento local 
-        const estado_Pokemones = {
-            player: state.player,
-            enemy: state.enemy,
-            trainer: state.trainer
-        };
-        
         // Se guardó nombre del último pokemón digitado que trajo datos
         guardar_Local_Storage("enemigo",enemy_datos.name);
-        // Se guardan datos de los pokemones y trainer para iniciar batalla
-        guardar_Local_Storage("estado_Pokemones", JSON.stringify(estado_Pokemones));
-        // Se habilita botón de batalla dado que ambos pokemones favorito y
-        // oponente cumplen para la batalla
-        botonIniciarBatalla.disabled = false;
+
+        // No se habilita batalla aquí, se obliga a confirmar con botón "Retar oponente"
+        botonIniciarBatalla.disabled = true;
         
     } else {
         
@@ -589,8 +684,12 @@ botonBuscarAlAzar.addEventListener('click', async () => {
     
 });
 
+// Acción del botón para iniciar batalla, deben haber datos válidos de estado
+//  para la batalla,y el botón estar habilitado.
 botonIniciarBatalla.addEventListener('click', async () => {
     
+    // Llama a función en battle.js que inicia batalla
     iniciar_Batalla();
-
 });
+// ******************************************************************************************
+// ******************************************************************************************

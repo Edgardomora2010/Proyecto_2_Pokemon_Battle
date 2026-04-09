@@ -5,6 +5,7 @@
  * Proyecto No. 2:  My Pokemon Battle
  * Tema: Programación de Javascript, HTML,CSS
  * Peticiones a API's.
+ * Archivo: (JAVASCRIPT)/JS (API.JS)
  * Profesor: Jose Pablo Garbanzo
  * Autor: Edgardo Mora M.
  * Fecha: 12-04-2026
@@ -60,7 +61,7 @@ export async function get_Pokemon(nombre_pokemon, signal = null) {
            
             name: datos_move.name,          // Nombre del movimiento 
             power: datos_move.power,        // Poder del ataque
-            accuracy: datos_move.accuracy,  //Precisión del movimiento 
+            accuracy: datos_move.accuracy,  // Precisión del movimiento 
             pp: datos_move.pp,              // Cantidad de usos del movimiento
             type: datos_move.type ? datos_move.type.name : null, // Tipo del movimiento
             damage_class: datos_move.damage_class ? datos_move.damage_class.name : null // Tipo de daño 

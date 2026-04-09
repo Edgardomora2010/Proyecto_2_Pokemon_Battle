@@ -19,8 +19,8 @@ const TRAINER = {
   definitiveMoveFlavor: "Quema y destrúyelo todo.",
 
   // ── END MESSAGES ──
-  winMessage: "Nunca tuviste ni remota oportunidad de vencerme.",
-  loseMessage: "Volveremos para aplastarte.",
+  winMessage: "Ganaste!: Nunca tuvieron ni remota oportunidad de vencerte!",
+  loseMessage: "Perdiste! Pero volveremos para aplastarlos.",
 
 };
 

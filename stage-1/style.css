@@ -5,22 +5,31 @@
  * Proyecto No. 2:  My Pokemon Battle
  * Tema: Programación de Javascript, HTML,CSS
  * Peticiones a API's.
+ * Archivo: CSS (style.css)
+ * Contiene el diseño físico y ordenamiento de componentes
+ * de la página. Que se ejecuta automáticamente con la página,
+ * salvo algunas instrucciones invocada por el javascript.
  * Profesor: Jose Pablo Garbanzo
  * Autor: Edgardo Mora M.
  * Fecha: 12-04-2026
  */
 
+/* ********************************************************************************************************************/
+/* CONFIGURACIONES POR DEFECTO PARA LOS COMPONENTES (ETIQUETAS) DEL HTML */
+/* ********************************************************************************************************************/
 
 /* ********************************************************************************************************************/
 /* RESET */
 /* ********************************************************************************************************************/
 
+/* propiedades generales */
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Visualización por defecto */
 body{
     background-color: white;
     color: black;
@@ -31,6 +40,7 @@ body{
 /* PAGINA GENERAL */
 /* ********************************************************************************************************************/
 
+/* <Div> */
 .pagina{
     width: 100%;
     max-width: 1400px;
@@ -38,28 +48,28 @@ body{
     padding: 10px;
 }
 
-#error_busqueda{
-    color: red;
-    font-weight: 700;
-}
-
+/* <P> Párrafos */ 
 p{
     margin-top: 8px;
 }
 
+/* <Input> Text */ 
 input{
     margin-top: 10px;
 }
 
+/* <button> Botones específicos */
 #btn_random,
 #btn_iniciar_batalla{
     margin-top: 15px;
 }
 
+/* <Div> generales */
 div{
     margin-top: 5px;
 }
 
+/* <Div> Barra de carga */
 #barra_carga{
     display: block;
     object-fit: contain;
@@ -68,14 +78,16 @@ div{
     max-width: 200px;
 }
 
+/* <img> imagen para pokemón oponente */
 #enemy_sprite{
     height: 100px;
     width: auto;
 }
 
+/* <button> Botón stage 1 */ 
 .btn_stage_1{
     padding: 8px 12px;
-    border: -1px;
+    border: 1px solid gray;
     border-radius: 6px;
     background-color: #ff8c00;  
     font-weight: 700;
@@ -83,25 +95,25 @@ div{
     -webkit-user-select: none;
 }
 
+/* <button> botones generales */
 button {
     /*user-select: none;*/
     outline: none;
 }
 
+/* <button> botones generales (focus) */
 button:focus {
     outline: none;
 }
 
+/* <li> elementos generales en listas */
 #lista_player_moves li,
 #lista_enemy_moves li{
     margin-bottom: 5px;
-}
-
-#lista_player_moves li,
-#lista_enemy_moves li{
     line-height: 1.4;
 }
 
+/* <div> */
 .hp_status{
     display: Flex;
     justify-content: space-between;
@@ -111,6 +123,7 @@ button:focus {
     background-color: transparent;
 }
 
+/* <div> HP de pokemon */
 #hp_pokemon_status{
     display: none;
     align-items: center;
@@ -121,6 +134,7 @@ button:focus {
     background-color: black;
 }
 
+/* <div> HP de pokemon oponente */
 #hp_enemy_status{
     display: none;
     align-items: center;
@@ -135,6 +149,7 @@ button:focus {
 /* NAV / HEADER / FOOTER */
 /* ********************************************************************************************************************/
 
+/* <Nav> menú principal de página */ 
 .menu_principal{
     height: 60px;
     background-color: black;
@@ -145,6 +160,7 @@ button:focus {
     border-radius: 6px;
 }
 
+/* <h1> título de menú */
 .titulo_menu{
     color: white;
     font-family: "Orbitron", sans-serif;
@@ -153,6 +169,7 @@ button:focus {
     text-align: center;
 }
 
+/* <button> Botón de modo (claro/oscuro) */
 .boton_tema{
     position: absolute;
     right: 12px;
@@ -170,12 +187,14 @@ button:focus {
     -webkit-user-select: none;
 }
 
+/* <header> Encabezado de página decorativo personalizado */
 .header_adorno{
     position: relative;
     height: 150px;
     background: transparent;
 }
 
+/* <header> Psedo-elemento con charizard */
 .header_adorno::before{
     content: "";
     position: absolute;
@@ -188,12 +207,14 @@ button:focus {
     opacity: 1;
 }
 
+/* <footer> Pie de página decorativo personalizado */
 .footer_adorno{
     position: relative;
     height: 150px;
     background: transparent;
 }
 
+/* <header> Psedo-elemento con charmander */
 .footer_adorno::before{
     content: "";
     position: absolute;
@@ -229,7 +250,7 @@ button:focus {
 /* TEMA GLOBAL */
 /* ********************************************************************************************************************/
 
-/* Color general de página en modo: Claro */
+/* Color general de página para modo: Claro */
 body.tema_claro{
     background-color: white;
     color: black;
@@ -308,12 +329,14 @@ body.tema_oscuro .barra_cooldown{
 /* BLOQUES COLAPSABLES */
 /* ********************************************************************************************************************/
 
+/* <details> Clase bloques colapables generales */
 .bloque_colapsable{
     margin-bottom: 14px;
     border: none;
     background-color: transparent;
 }
 
+/* <Summary> clase:titulo colapsable (específico) */
 .titulo_colapsable{
     display: block;
     padding: 14px 18px;
@@ -330,19 +353,23 @@ body.tema_oscuro .barra_cooldown{
     transition: 0.2s ease;
 }
 
+/* Pseudo-elemento */
 .titulo_colapsable::-webkit-details-marker{
     display: none;
 }
 
+/* titulo colapsable: Pseudo-elemento */
 .titulo_colapsable::after{
     content: "  [-]";
     font-weight: normal;
 }
 
+/* <details> bloque colapsable:  con pseudo-clase + pseudo-elemento */
 .bloque_colapsable:not([open]) .titulo_colapsable::after{
     content: "  [+]";
 }
 
+/* <details> */
 .bloque_colapsable[open] .stage_1,
 .bloque_colapsable[open] .stage_2,
 .bloque_colapsable[open] .battle_log{
@@ -353,6 +380,7 @@ body.tema_oscuro .barra_cooldown{
 /* CONTENIDO INTERNO DE CADA BLOQUE */
 /* ********************************************************************************************************************/
 
+/* <Section> Selectores agrupados */
 .stage_1,
 .stage_2,
 .battle_log{
@@ -362,6 +390,7 @@ body.tema_oscuro .barra_cooldown{
     border-radius: 8px;
 }
 
+/* <ul> lista para resultados de búsqueda */
 #resultados_busqueda {
     margin-top: 6px;
     border: 1px solid #ccc;
@@ -369,24 +398,34 @@ body.tema_oscuro .barra_cooldown{
     max-width: 250px;
 }
 
+/* <li> elemento de lista de resultado de búsqueda */
 #resultados_busqueda li {
     list-style: none;
     padding: 6px 10px;
     border-bottom: 1px solid #eee;
 }
 
+/* <li> psedo-clase: último elemento */
 #resultados_busqueda li:last-child {
     border-bottom: none;
 }
 
+/* <li> pseudo clase: resalta elemento al pasar cursor */
 #resultados_busqueda li:hover {
     background-color: #f2f2f2;
+}
+
+/* objeto de resultado de búsqueda cuando esta no existe */
+#error_busqueda{
+    color: red;
+    font-weight: 700;
 }
 
 /* ********************************************************************************************************************/
 /* STAGE 1 */
 /* ********************************************************************************************************************/
 
+/* <div> contenedor para stage 1 */
 .contenedor_stage_1{
     display: flex;
     justify-content: space-evenly;
@@ -394,6 +433,10 @@ body.tema_oscuro .barra_cooldown{
     gap: 20px;
 }
 
+/* <div> subcontenedor (skeleton) básico para acoplar datos
+ *  de pokemón favorito, pokemón enemigo y trainer card,para
+ * este proyecto se utilizan 3 en stage 1, en columnas 
+ * verticales simétricas que ocupan un 33 % del ancho total */
 .panel_stage_1{
     flex: 0 0 calc(33.333% - 14px);
     min-height: 300px;
@@ -406,6 +449,7 @@ body.tema_oscuro .barra_cooldown{
     align-items: center;
 }
 
+/* <h3> selector descendiente : títulos (h3) en stage 1 */
 .panel_stage_1 h3{
     width: 100%;
     margin-bottom: 14px;
@@ -416,34 +460,34 @@ body.tema_oscuro .barra_cooldown{
     border-bottom: 2px solid rgba(0,0,0,0.15);
 }
 
+/* <div> subpanel vertical 1, para dividir texto en 2 columnas
+ * para los paneles de (pokemón favorito y pokemón oponente) */
 .panel_columna_1{
-    
     display: block;
     margin-right: 20px;
     margin-left: 20px;
- 
 }
 
+/* <div> subpanel vertical 2, para dividir texto en 2 columnas
+ * para los paneles de (pokemón favorito y pokemón oponente) */
 .panel_columna_2{
-    
     display: block;
     margin-right: 20px; 
     margin-left: 20px;
-
-    
 }
 
+/* <div> sub-contenedor, contiene sub-paneles (columna_1, columna_2) */
 .contenedor_info_texto{
     display: flex;
     justify-content: space-between;
     align-items: stretch;
-
 }
 
 /* ********************************************************************************************************************/
 /* STAGE 2 */
 /* ********************************************************************************************************************/
 
+/* <div> contenedores para (controles, battle_arena) */
 .battle_arena,
 .controles{
     margin-bottom: 15px;
@@ -453,6 +497,7 @@ body.tema_oscuro .barra_cooldown{
     border-radius: 15px;
 }
 
+/* <H3> titulo h3 para contenedores (controles, battle_arena) */
 .battle_arena h3,
 .controles h3,
 .battle_info h3,
@@ -471,34 +516,43 @@ body.tema_oscuro .barra_cooldown{
 /* ARENA */
 /* ********************************************************************************************************************/
 
+/* <div> contenedor para cuadrícula 3x3 para batalla */
 .arena_grid{
     display: none;
     /*display: grid;*/
     grid-template-columns: repeat(3, 150px);
     justify-content: space-evenly;
     gap: 18px;
-    /* Se implenta cambio en propiedad desde JS para que dinámico */
+    
+    /* Se implenta cambio en propiedad transparencia, desde
+     *  JS para que sea dinámico */
     /*background-color: transparent;*/
 }
 
+/* <div> contenedor de arena de batalla */
 .battle_arena{
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* Se implenta cambio en propiedad desde JS para que dinámico */
+    
+    /* Se implenta cambio en propiedad: backgroun-image,
+     *  desde JS para que sea dinámico */
     /*background-image: url('./img/Arena_1.png');*/
 }
 
+/* <div> celda individual de cuadícula de 3 x 3 */ 
 .celda{
     width: 120px;
     aspect-ratio: 1 / 1;
     padding: 10px;
-    border: 2.5px solid gray;
-    border-radius: 8px;
+    border: 2px solid gray;
+    border-radius: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Se implenta cambio en propiedad desde JS para que dinámico */
+    
+    /* Se implenta cambio en propiedad de: transparencia,
+     *  desde JS para que dinámico */
     /*background-color: transparent;*/
 }
 
@@ -506,16 +560,20 @@ body.tema_oscuro .barra_cooldown{
 /* CONTROLES */
 /* ********************************************************************************************************************/
 
+/* <div> Contenedor de controles (botones, flechas) para
+ * movimiento del pokemón favorito */
 .contenedor_controles{
     display: flex;
     justify-content: space-evenly;
-    align-items: stretch;
+    align-items: center;
     gap: 20px;
+    flex-wrap: nowrap;
 }
 
+/* <button> dentro de contenedor_controles */
 .contenedor_controles button{
     min-width: 180px;
-    max-height: 80px;
+    height: 80px;
     background-color: white;
     color: black;
     border: 2.5px solid gray;
@@ -524,29 +582,69 @@ body.tema_oscuro .barra_cooldown{
     font-family: "Orbitron", sans-serif;
     font-size: 0.9rem;
     transition: 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
 }
 
+/* <button> efecto Hover para botones, en contenedor_controles */
 .contenedor_controles button:hover{
     border-color: black;
     background-color: #f4f4f4;
 }
 
+/* <Div>  subcontenedor de flechas */
 .flechas{
-    min-width: 150px;
-    max-height: 80px;
+    min-width: 180px;
+    height: 80px;
     border: 2.5px solid gray;
     border-radius: 8px;
     display: flex;
-    justify-content: space-evenly;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    font-size: 2rem;
     background-color: white;
+    padding: 6px 8px;
+    box-sizing: border-box;
 }
 
+/* <div> Texto pequeño superior, con indicación de utilizar flechas de
+ * teclado para mover pokemón */
+#indicacion_flechas{
+    width: 100%;
+    text-align: center;
+    font-family: "Orbitron", sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    line-height: 1.05;
+    margin: 0 0 4px 0;
+}
+
+/* <div> Contenedor interno de flechas */
+#cont_flechas{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+    flex: 1;
+}
+
+/* <span> Flechas visuales */
+#cont_flechas span{
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* <div> objeto para cool down, al hacer ataques a pokemón oponente */
 .cooldown{
     min-width: 190px;
-    max-height:80px;
-    padding: 12px;
+    max-width: 350px;
+    width: 350px;
+    height: 80px;
+    padding: 10px 12px;
     border: 2.5px solid gray;
     border-radius: 8px;
     background-color: white;
@@ -554,33 +652,42 @@ body.tema_oscuro .barra_cooldown{
     flex-direction: column;
     justify-content: center;
     align-items: stretch;
-    gap: 12px;
+    gap: 8px;
+    box-sizing: border-box;
 }
 
+/* <P> Párrafo dentro de objeto: cool down> */
 .cooldown p{
     text-align: center;
     font-family: "Orbitron", sans-serif;
     font-size: 0.9rem;
+    margin: 0;
 }
 
+/* <div> barra de animación dentro de objeto: cool_down */ 
 .barra_cooldown{
-    width: 200px;
-    height: 60px;
+    width: 100%;
+    height: 12px;
     border: 2px solid rgba(0,0,0,0.25);
     border-radius: 6px;
-    background-color: white;
+    background-color: greenyellow;
+    box-sizing: border-box;
 }
 
 /* ********************************************************************************************************************/
 /* BATTLE LOG */
 /* ********************************************************************************************************************/
 
+/* <div> contenedor para log de batallas */
 .contenedor_battle_log{
     display: flex;
     justify-content: space-between;
     gap: 20px;
 }
 
+/* <div> subcontenedor para battle_info */
+/* subontenedor donde se sitúa evento de log, y resultados de
+ *  batallas */
 .battle_info{
     flex: 0 0 calc(65% - 10px);
     min-height: 170px;
@@ -590,17 +697,10 @@ body.tema_oscuro .barra_cooldown{
     border-radius: 8px;
 }
 
-.battle_resultado{
-    flex: 0 0 calc(35% - 10px);
-    min-height: 170px;
-    padding: 16px;
-    background-color: white;
-    border: 2.5px solid gray;
-    border-radius: 8px;
-}
-
-#log_eventos,
-#log_resultados{
+/* <div> contenedor para mensajes de eventos de log al
+ * realizarse la batalla (ataques de pokemón favorito,
+ * contrincante, nivel de hp rebajado, etc) */
+#log_eventos {
     max-height: 200px;
     height: 100px;
     overflow-y: auto;
@@ -612,6 +712,32 @@ body.tema_oscuro .barra_cooldown{
     border: 2.5px solid black;
     border-radius: 8px;
     
+}
+
+ /* <div> contenedor para resultados de batalla */
+.battle_resultado{
+    flex: 0 0 calc(35% - 10px);
+    min-height: 170px;
+    padding: 16px;
+    background-color: white;
+    border: 2.5px solid gray;
+    border-radius: 8px;
+}
+
+/* <div> contenedor para mensajes finales de batalla, sirve 
+ * para indicar, si la batalla se ganó o se perdió */
+#log_resultados{
+     max-height: 200px;
+    height: 100px;
+    overflow-y: auto;
+    background-color: lightseagreen;
+    color: black;
+    font-weight: 600;
+    font-size: x-large;
+    padding: 10px;
+    border-color: black;
+    border: 2.5px solid black;
+    border-radius: 8px;
 }
 
 /* ********************************************************************************************************************/
