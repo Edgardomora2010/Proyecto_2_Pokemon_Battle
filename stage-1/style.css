@@ -151,13 +151,17 @@ button:focus {
 
 /* <Nav> menú principal de página */ 
 .menu_principal{
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
     height: 60px;
     background-color: black;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    border-radius: 6px;
+    border-radius: 4px;
+    position: fixed;
 }
 
 /* <h1> título de menú */
@@ -244,6 +248,18 @@ button:focus {
     right: 0;
     height: 120px;
     z-index: 10;
+}
+
+/* Botón de mute/ unmute */ 
+#btn_musica{
+    position: absolute;
+    right: 200px; 
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 /* ********************************************************************************************************************/
@@ -483,6 +499,20 @@ body.tema_oscuro .barra_cooldown{
     align-items: stretch;
 }
 
+/* Campo de texto para nombre de pokemón enemigo */
+#txt_nombre_enemigo{
+    font-size: 14px;
+    padding: 6px 10px;
+    border: 1px solid #666;
+    border-radius: 6px;
+    outline: none;
+    transition: all 0.2s ease;
+    max-width: 220px;
+    width: 100%;
+    background-color: #f8f8f8;
+    color: #222;
+}
+
 /* ********************************************************************************************************************/
 /* STAGE 2 */
 /* ********************************************************************************************************************/
@@ -554,6 +584,53 @@ body.tema_oscuro .barra_cooldown{
     /* Se implenta cambio en propiedad de: transparencia,
      *  desde JS para que dinámico */
     /*background-color: transparent;*/
+}
+
+/* Permite posicionar efectos visuales dentro de la celda */
+.celda{
+    position: relative;
+}
+
+/* Gif temporal de impacto sobre el enemigo */
+.efecto_impacto{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    pointer-events: none;
+    z-index: 999;
+}
+
+#mensaje_final_batalla{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+#mensaje_final_batalla img{
+    max-width: 320px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.efecto_derrota{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    pointer-events: none;
+    z-index: 60;
 }
 
 /* ********************************************************************************************************************/
@@ -752,6 +829,11 @@ body.tema_oscuro .barra_cooldown{
         padding: 10px 70px 10px 10px;
     }
 
+    /* Ajuste del espacio superior en móvil */
+    .pagina{
+        margin-top: 90px;
+    }
+
     .titulo_menu{
         font-size: 1rem;
     }
@@ -776,8 +858,19 @@ body.tema_oscuro .barra_cooldown{
         min-height: 220px;
     }
 
+    /* Se mantiene cuadrícula de batalla en formato 3 x 3,
+     * pero con celdas más pequeñas para móviles */
     .arena_grid{
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, 90px);
+        justify-content: center;
+        gap: 10px;
+    }
+
+    /* Se reduce tamaño de celda para que la arena siga siendo
+     * visible y funcional en pantallas pequeñas */
+    .celda{
+        width: 80px;
+        padding: 6px;
     }
 
     .contenedor_controles{

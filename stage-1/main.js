@@ -75,6 +75,8 @@ const listaResultadosBusqueda = document.getElementById('resultados_busqueda'); 
 const lblMensajeError  =   document.getElementById('error_busqueda');           // Mensaje de error, pokemón no encontrado
 const bloqueStage2 = document.getElementById("bloque_stage_2");                 // Bloque/Sección colapsable para Stage 2
 const bloqueLog    = document.getElementById("bloque_log");                     // Bloque/Sección colapsable para Log de juego
+const musicaFondo = document.getElementById("musica_fondo");
+const botonMusica = document.getElementById("btn_musica");
 // ******************************************************************************************
 // ******************************************************************************************
 
@@ -87,6 +89,14 @@ const bloqueLog    = document.getElementById("bloque_log");                     
 async function init() {
     
     try {
+        
+        // Validación básica
+        if (!musicaFondo || !botonMusica) return;
+        
+        // Configuración inicial
+        musicaFondo.volume = 0.5;
+        musicaFondo.muted = true;
+        document.getElementById("musica_fondo").play();
         
         // Carga todos los nombres de los pokemones, solicitándolos
         // a la API. Esto para poder crear una búsqueda sugerida real
@@ -397,7 +407,7 @@ const buscarConDebounce = debounce(async function () {
         state.enemy = null;
         enemy_datos = null;
         render_Enemy_Panel(state.enemy);
-        render_carga_resultados(1,"No se encontraron datos.");
+        render_carga_resultados(2,"No se encontraron datos.");
         botonIniciarBatalla.disabled = true;
         
         return;
@@ -556,7 +566,7 @@ botonBuscarOponente.addEventListener('click', async () => {
         state.enemy = null;
         enemy_datos = null;
         render_Enemy_Panel(state.enemy);
-        render_carga_resultados(1,"No se encontraron datos.");
+        render_carga_resultados(2,"No se encontraron datos.");
         botonIniciarBatalla.disabled = true;
                     
     } else {
@@ -610,7 +620,7 @@ botonBuscarOponente.addEventListener('click', async () => {
                  
                  // Resetea panel enemigo
                  render_Enemy_Panel(state.enemy);
-                 render_carga_resultados(1,"No se encontraron datos.");
+                 render_carga_resultados(2,"No se encontraron datos.");
                  lblMensajeError.textContent = "No se encontró un Pokemón con ese nombre.";
                  botonIniciarBatalla.disabled = true;
              }
@@ -623,7 +633,7 @@ botonBuscarOponente.addEventListener('click', async () => {
         state.enemy = null;
         enemy_datos = null;
         render_Enemy_Panel(state.enemy);
-        render_carga_resultados(1,"No se encontraron datos.");
+        render_carga_resultados(2,"No se encontraron datos.");
         lblMensajeError.textContent = "Ocurrió un error al buscar el Pokemón.";
         botonIniciarBatalla.disabled = true;
         
@@ -676,7 +686,7 @@ botonBuscarAlAzar.addEventListener('click', async () => {
         state.enemy = null;
         enemy_datos = null;
         render_Enemy_Panel(state.enemy);
-        render_carga_resultados(1,"No se pudo cargar el pokemón aleatoriamente.");
+        render_carga_resultados(2,"No se pudo cargar el pokemón aleatoriamente.");
         lblMensajeError.textContent = "No se pudo cargar el pokemón aleatoriamente.";
         botonIniciarBatalla.disabled = true;
         
@@ -690,6 +700,26 @@ botonIniciarBatalla.addEventListener('click', async () => {
     
     // Llama a función en battle.js que inicia batalla
     iniciar_Batalla();
+});
+
+// Función para mutear y desmutear música de página
+// Función para mutear y desmutear música de página
+botonMusica.addEventListener("click", async () => {
+    
+    // Si el audio no ha iniciado, se intenta reproducir
+    if (musicaFondo.paused){
+        try{
+            await musicaFondo.play();
+        } catch(error){
+            console.error("No se pudo reproducir audio:", error);
+            return;
+        }
+    }
+    
+    // Cambia estado mute / unmute
+    musicaFondo.muted = !musicaFondo.muted;
+    // Cambia texto de botón
+    botonMusica.textContent = musicaFondo.muted ? "Música: Off 🔇" : "Música: On 🔊";
 });
 // ******************************************************************************************
 // ******************************************************************************************

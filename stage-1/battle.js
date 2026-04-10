@@ -29,6 +29,7 @@ const logResultados = document.getElementById("log_resultados");                
 const botonAtaqueSimple = document.getElementById("btn_ataque_simple");         // Botón de ataque simple
 const botonAtaqueDefinitivo = document.getElementById("btn_ataque_definitivo"); // Botón de ataque definitivo
 const barraCooldown = document.querySelector(".barra_cooldown");                // Barra de cool down 
+const mensajeFinalBatalla = document.getElementById("mensaje_final_batalla");   
 let arenaEscenario = 1;                                                       // Arena por defecto
 
 // Objetos para manipulación individual de celdas de la cuadrícula (grid)
@@ -71,7 +72,10 @@ export function iniciar_Batalla(){
     // Se reinicia estado visual y de control del cooldown al empezar batalla
     controlDatosBatalla.attackOnCooldown = false;
     barraCooldown.style.width = "100%";
+    
+    // Se rehabilita botón de ataque simple y definitivo para nueva batalla 
     botonAtaqueDefinitivo.disabled = false;
+    botonAtaqueSimple.disabled = false;
     
     // Genera número aleatorio entre 1 y 3, pero evitando repetir
     // // la misma arena inmediata anterior
@@ -234,12 +238,18 @@ function render_Battle(state){
             logResultados.innerHTML = `<p>${state.trainer.winMessage}</p>`;
         }
         
+        // Llama función que muestra resultado de terminación de batalla, pero más gráfico
+        // que escribir eventos en el log, también llama a animación de pokemón derrotado
+        mostrar_Final_Batalla();
+        
     }
     
     // actualiza el log de eventos de batalla en el DOM, de acuerdo a los estados
     // guardado en variable state.log de la batalla, que guarda cuando el enemigo
     // o el player son atacados
     logEventosJuego.innerHTML = state.log.map(evento => `<p>${evento}</p>`).join("");
+    
+    
 }
 
 
@@ -399,6 +409,78 @@ function checkBattleEnd(){
     
 }
 
+// Función para mostrar animación temporal de ataque sobre la celda
+// donde se encuentra ubicado el pokemón enemigo.
+function animar_ataques_Enemigo(tipoAtaque){
+    
+    let efectoImpacto = null;
+    
+    // Si no existe estado de batalla, se aborta función
+    if (!controlDatosBatalla) return;
+    
+    // Se obtiene la celda actual donde está ubicado el enemigo
+    const celdaObjetivo = enemyCells[controlDatosBatalla.enemyPosition - 1];
+    
+    // Si la celda no existe, se aborta función
+    if (!celdaObjetivo) return;
+    
+    // Ataque simple 
+    if(tipoAtaque === 1)
+    {
+        efectoImpacto = document.createElement("img");
+        efectoImpacto.src = "./stage-1/img/Ataque_1.gif"; //?t=" + Date.now();
+        
+    // Ataque definitivo
+    } else if (tipoAtaque === 2){
+        
+        efectoImpacto = document.createElement("img");
+        efectoImpacto.src = "./stage-1/img/Ataque_2.gif"; // ?t=" + Date.now();
+        
+    } else {
+        return;
+    }
+    
+    efectoImpacto.alt = "Impacto de ataque";
+    efectoImpacto.classList.add("efecto_impacto");
+    celdaObjetivo.appendChild(efectoImpacto);
+
+    setTimeout(() => {
+        efectoImpacto.remove();
+    }, 600);
+}
+
+// Función para mostrar resultado final más gráfico tras terminar
+// batalla, y efecto visual sobre la celda del pokemón que perdió
+//  la batalla.
+function mostrar_Final_Batalla(){
+    
+    let imagenMensaje = "";
+    let celdaPerdedor = null;
+    
+    // Si el pokemón player quedó con 0 HP, perdió la batalla
+    if (controlDatosBatalla.playerHP === 0){
+        imagenMensaje = "./stage-1/img/Perdiste.png";
+        celdaPerdedor = playerCells[controlDatosBatalla.playerPosition - 1];
+        
+    // Si el enemigo quedó con 0 HP, el player ganó la batalla
+    } else if (controlDatosBatalla.enemyHP === 0){
+        imagenMensaje = "./stage-1/img/Ganaste.png";
+        celdaPerdedor = enemyCells[controlDatosBatalla.enemyPosition - 1];
+        
+    } else {
+        return;
+    }
+    
+    // Se muestra mensaje final centrado
+    mensajeFinalBatalla.innerHTML = `<img src="${imagenMensaje}" alt="Resultado final">`;
+    mensajeFinalBatalla.style.display = "block";
+    
+    // Si existe celda del perdedor, se agrega efecto visual
+    if (celdaPerdedor){
+        celdaPerdedor.innerHTML += `<img src="./stage-1/img/Derrotado.gif" alt="Derrota" class="efecto_derrota">`;
+    }
+}
+
 // ******************************************************************************************
 // FUNCIONES DE MANEJO DE EVENTOS Y COMPORTAMIENTO DE OBJETOS (EVENTLISTENERS())
 // ****************************************************************************************** 
@@ -473,6 +555,7 @@ botonAtaqueSimple.addEventListener('click', () => {
     {
         // Se resta ataque a los puntos de vida(HP) del enemigo
         controlDatosBatalla.enemyHP -= damage;
+            
     }
     
     // Si los puntos de vida del enemigo,menos el ataque, restan por debajo de 0
@@ -481,6 +564,9 @@ botonAtaqueSimple.addEventListener('click', () => {
     {
         controlDatosBatalla.enemyHP = 0;
     }
+    
+     // se llama a función de animación para ataque a enemigo
+    animar_ataques_Enemigo(1);
     
     // Se registra evento en log
     controlDatosBatalla.log.push("Atacaste al enemigo y causaste: " + damage);
@@ -493,6 +579,9 @@ botonAtaqueSimple.addEventListener('click', () => {
     checkBattleEnd();
     // Se actualiza interfaz
     render_Battle(controlDatosBatalla);
+    
+    // Se muestra animación visual de impacto sobre enemigo
+    animar_ataques_Enemigo(1);
     
 });
 
@@ -518,6 +607,9 @@ botonAtaqueDefinitivo.addEventListener('click', () => {
     checkBattleEnd();
     // Se actualiza interfaz de página
     render_Battle(controlDatosBatalla);
+    // Se muestra animación visual de impacto sobre enemigo
+    animar_ataques_Enemigo(2);
+    
 });
 
 // Función para control de movimiento del pokemón favorito, este puede moverse 
@@ -594,8 +686,26 @@ export function limpiar_Batalla_Anterior(){
     arenaCuadricula.style.display = "none";
     // Se reinicia cooldown visual
     barraCooldown.style.width = "100%";
-    // Se rehabilita botón definitivo para nueva batalla
+    // Se rehabilita botón de ataque simple
+    botonAtaqueSimple.disabled = false;
+    // Se rehabilita botón definitivo
     botonAtaqueDefinitivo.disabled = false;
-
+    
+    // Se oculta mensaje final de batalla
+    if (mensajeFinalBatalla){
+        mensajeFinalBatalla.innerHTML = "";
+        mensajeFinalBatalla.style.display = "none";
+    }
+    
+    // Se eliminan efectos visuales de derrota que hayan quedado en celdas
+    document.querySelectorAll(".efecto_derrota").forEach(efecto => {
+        efecto.remove();
+    });
+    
+    // Se eliminan efectos visuales de ataque que hayan quedado en celdas
+    document.querySelectorAll(".efecto_impacto").forEach(efecto => {
+        efecto.remove();
+    });
+    
 }
 

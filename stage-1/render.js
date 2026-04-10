@@ -284,10 +284,15 @@ export function render_carga_resultados(estado, mensaje){
     // Barra cargando mientras estado = 0
     if (estado === 0)
     {
+        // Muestra barra de búsqueda
         mi_enemigo_barra_carga.src = "./stage-1/img/Loading_animation_bar.gif";
     } else if (estado === 1) {
         // imagen de lupa de encontrado, y esconde barra cargando mientras estado = 1
-        mi_enemigo_barra_carga.src = "./stage-1/img/Lupa.png";
+        mi_enemigo_barra_carga.src = "./stage-1/img/Lupa_2.png";
+        
+    } else if (estado === 2) {
+        // imagen de lupa de no encontrado, y esconde barra cargando mientras estado = 2
+        mi_enemigo_barra_carga.src = "./stage-1/img/Lupa_1.png";
     }
     
 }

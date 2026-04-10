@@ -56,6 +56,9 @@
                   <!-- Título en barra de menú -->
                   <h1 class="titulo_menu">My Pokemon Battle</h1>
                   
+                  <!-- Botón para mutear y desmutear música de página -->
+                  <button id="btn_musica" class="boton_tema" type="button">Música: Off 🔇 </button>
+                  
                   <!-- Elementos de menú -->
                   <!-- Botón para cambiar entre modo claro y modo oscuro -->
                   <button id="bttn_tema" class="boton_tema" type="button">Modo oscuro</button>
@@ -264,7 +267,7 @@
                   <!-- estatus de carga del enemigo -->
                   <div id="enemy_status">
                     <p id ="resultado_carga"><strong>Resultado:</strong></p>
-                    <img id="barra_carga" src="./stage-1/img/Lupa.png" alt="Indicador de carga">
+                    <img id="barra_carga" src="./stage-1/img/Lupa_1.png" alt="Indicador de carga">
                   </div>
                 
                 </div> <!-- Termina mini-panel de estadísticas, del pokemon enemigo -->
@@ -416,6 +419,19 @@
     </footer>
 
   </div>
+  
+  <!-- MUSICA: -->
+  <!-- Pareció cool dado que se implementó tanto respecto al modo de batalla
+       que la página tenga música de los antiguos gameboy -->
+  
+  <!-- Se desconocía de estiqueta pero se presuponía su existencia dada su
+       implementación en montones de páginas que se visitan -->
+  <audio id="musica_fondo" loop autoplay>
+    <source src="./stage-1/audio/Pokemon_Gameboy_Music.mp3" type="audio/mpeg">
+  </audio>
+  
+  <!-- Mensaje resultado de batalla más gráfico -->
+  <div id="mensaje_final_batalla"></div>
   
   <!-- Recomendación de posicionamiento del Javascript de acuerdo con material
        de clases -->  
