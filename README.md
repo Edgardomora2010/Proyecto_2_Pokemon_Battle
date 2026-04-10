@@ -1,6 +1,13 @@
 My Pokémon Battle
+Técnico en Desarrollo de Applicaciones de Software
 Proyecto de curso: Programación Web I – TEC.
-Aplicación tipo single-page que integra consumo de: API, manejo de estado y
+ * Tema: Programación de Javascript, HTML,CSS
+ * Peticiones a API's.
+ * Archivo: (JAVASCRIPT)/JS (main.js)
+ * Profesor: Jose Pablo Garbanzo
+ * Autor: Edgardo Mora M.
+ * Fecha: 12-04-2026
+Detalles: Aplicación tipo single-page que integra consumo de: API, manejo de estado y
 lógica de combate de pokemones.
 
 Tecnologías
@@ -8,7 +15,23 @@ HTML5 / CSS3 / JavaScript
 PokeAPI
 LocalStorage
 
-Enfoque
+Retos: (Se expondrá en video con más detalle) 
+1) Orden y estructura del código
+2. Comprensión de funciones avanzadas
+3. Integración de la lógica del sistema
+4. Adaptación al entorno web
+5. Control y depuración de errores (bugs)
+
+Dirección de video de proyecto:
+https://www.loom.com/share/d6b9e4e2c1f54b4ba4797ec6b587e233
+
+Ruta del proyecto:
+https://github.com/Edgardomora2010/Proyecto_2_Pokemon_Battle
+
+Página publicada funcional: 
+https://edgardomora2010.github.io/Proyecto_2_Pokemon_Battle/
+
+Enfoque/Abordaje
 La app/página se divide en:
 Stage 1: selección de pokémon (player/enemy)
 Stage 2: batalla de los pokemones.

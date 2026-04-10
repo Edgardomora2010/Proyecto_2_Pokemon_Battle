@@ -151,9 +151,12 @@ button:focus {
 
 /* <Nav> menú principal de página */ 
 .menu_principal{
+    position: fixed;
     top: 0;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 100%;
+    max-width: calc(1400px - 20px); /* igual que .pagina */
     z-index: 1000;
     height: 60px;
     background-color: black;
@@ -161,7 +164,6 @@ button:focus {
     align-items: center;
     justify-content: center;
     border-radius: 4px;
-    position: fixed;
 }
 
 /* <h1> título de menú */
@@ -194,7 +196,10 @@ button:focus {
 /* <header> Encabezado de página decorativo personalizado */
 .header_adorno{
     position: relative;
-    height: 150px;
+    /* Contemplando cambio de menú (fixed) ya que recortó 
+     * la cabeza de charizard */ 
+    height: 210px;
+    padding-top: 60px;
     background: transparent;
 }
 
